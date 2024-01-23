@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">ImageSearchPageApp</string>
+    <string name="image_search">이미지 검색</string>
+    <string name="my_page">내 보관함</string>
 </resources>
