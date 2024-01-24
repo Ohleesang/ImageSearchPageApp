@@ -13,6 +13,17 @@
         android:layout_height="match_parent"
         android:padding="10dp">
 
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lav_heart"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="8dp"
+            app:lottie_rawRes="@raw/heart_animation"
+            app:lottie_autoPlay="false"
+            app:lottie_loop="false"
+            app:layout_constraintEnd_toEndOf="@+id/iv_thumb_nail"
+            app:layout_constraintTop_toBottomOf="@+id/iv_thumb_nail" />
+
         <ImageView
             android:id="@+id/iv_thumb_nail"
             android:layout_width="180dp"
