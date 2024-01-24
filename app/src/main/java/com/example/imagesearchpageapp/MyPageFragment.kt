@@ -34,7 +34,7 @@ class MyPageFragment : Fragment() {
     ): View? {
         binding = FragmentMyPageBinding.inflate(inflater,container,false)
         binding.rvMyPage.apply{
-            adapter = ResultAdapter(List.mItems)
+            adapter = ResultAdapter(List.likeItems)
             layoutManager = GridLayoutManager(requireContext(),2)
         }
         return binding.root
