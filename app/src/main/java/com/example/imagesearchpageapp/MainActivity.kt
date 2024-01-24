@@ -12,6 +12,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         initFragment()
+
+        setDummyData()
     }
 
     private fun initFragment() {
@@ -36,5 +38,9 @@ class MainActivity : AppCompatActivity() {
             .setReorderingAllowed(true)
             .addToBackStack("")
             .commit()
+    }
+    private fun setDummyData(){
+        val item = Item(R.drawable.img_dummy_data,"Naver","201401240422")
+        for(i in 0..10) List.mItems.add(item)
     }
 }

@@ -21,7 +21,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <SearchView
+            <androidx.appcompat.widget.SearchView
                 android:id="@+id/sv_search_img"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -31,7 +31,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-            </SearchView>
+            </androidx.appcompat.widget.SearchView>
 
             <Button
                 android:id="@+id/btn_search_ok"
