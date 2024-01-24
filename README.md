@@ -3,7 +3,7 @@
 [FigmaLink](https://www.figma.com/file/IR8yyToUoxLh21Mqz62Fv6/ImageSearchPageApp?type=design&node-id=0%3A1&mode=design&t=t7LsGqJoS4UNnFqB-1)
 
 # A 타입
-- [ ] 검색어를 입력할 수 있도록 검색창을 구현합니다.
+- [x] 검색어를 입력할 수 있도록 검색창을 구현합니다.
 - [ ] 검색어를 입력하고 검색 버튼을 누르면 검색된 이미지 리스트를 보여줍니다.
 - [ ] 검색 버튼을 누르면 키보드는 숨김 처리하도록 구현합니다.
 - [ ] API 검색 결과에서 thumbnail_url, display_sitename, datetime을 받아오도록 구현 합니다.
