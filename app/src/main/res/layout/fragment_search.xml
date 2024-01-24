@@ -29,7 +29,8 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/btn_search_ok"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toTopOf="parent"
+                app:queryHint="검색할 단어를 입력하세요.">
 
             </androidx.appcompat.widget.SearchView>
 
