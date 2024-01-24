@@ -4,4 +4,12 @@ data class Item(val thumbNaileUri: Int, val siteName: String, val dateTime: Stri
 
 object List{
     val mItems = mutableListOf<Item>()
+    val likeItems = mutableListOf<Item>()
+
+    fun addLikeItems(item: Item){
+        likeItems.add(item)
+    }
+    fun deleteLikeItems(item: Item){
+        likeItems.remove(item)
+    }
 }
