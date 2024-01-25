@@ -17,6 +17,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -95,11 +97,26 @@ class SearchFragment : Fragment() {
             val newItems = mutableListOf<Item>()
             documents.forEach {
                 //이후 데이터를 저장
-                newItems.add(Item(false,it.dateTime,it.siteName,it.thumbNailUrl))
+                val parsedDateTime = parsingDateTime(it.dateTime)
+                newItems.add(Item(false, parsedDateTime, it.siteName, it.thumbNailUrl))
             }
             ListItem.mItems = newItems
             _searchImages.value = documents
         }
+    }
+
+
+    // dateFormatter 를 이용
+    private fun parsingDateTime(oldDateTime: String): String {
+
+
+        // oldDateTime 을 LocalDateTime 객체로 파싱
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
+        val parsedDateTime = LocalDateTime.parse(oldDateTime, formatter)
+
+        // LocalDateTime 값을 새로 지정한 Formatter 값으로 바꿔서 Return
+        val outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+        return parsedDateTime.format(outputFormatter)
     }
 
     private suspend fun searchImages(query: String) = withContext(Dispatchers.IO) {
