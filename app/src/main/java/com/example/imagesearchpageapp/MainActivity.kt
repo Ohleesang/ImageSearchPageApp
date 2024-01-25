@@ -13,7 +13,7 @@ class MainActivity : AppCompatActivity() {
 
         initFragment()
 
-        setDummyData()
+//        setDummyData()
     }
 
     private fun initFragment() {
@@ -40,9 +40,9 @@ class MainActivity : AppCompatActivity() {
             .commit()
     }
 
-    private fun setDummyData() {
-        for (i in 0..10) ListItem.mCardItems.add(
-            CardItem(R.drawable.img_dummy_data, "Naver $i", "201401240422", false)
-        )
-    }
+//    private fun setDummyData() {
+//        for (i in 0..10) ListItem.mCardItems.add(
+//            CardItem(R.drawable.img_dummy_data, "Naver $i", "201401240422", false)
+//        )
+//    }
 }

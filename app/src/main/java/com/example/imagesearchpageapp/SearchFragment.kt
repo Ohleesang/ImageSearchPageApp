@@ -30,9 +30,10 @@ class SearchFragment : Fragment() {
     private lateinit var binding: FragmentSearchBinding
 
     private val _searchImages = MutableLiveData<List<Document>>()
-    private var searchImages : LiveData<List<Document>> = _searchImages.switchMap {
-        MutableLiveData(it)
-    }
+
+    //    private var searchImages : LiveData<List<Document>> = _searchImages.switchMap {
+    //        MutableLiveData(it)
+    //    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -47,8 +48,19 @@ class SearchFragment : Fragment() {
     ): View? {
         binding = FragmentSearchBinding.inflate(inflater, container, false)
         binding.rvSearch.apply {
-            adapter = ResultAdapter(ListItem.mCardItems)
+            adapter = ResultAdapter(requireContext(), ListItem.mCardItems)
             layoutManager = GridLayoutManager(requireContext(), 2)
+        }
+        _searchImages.observe(viewLifecycleOwner) { list ->
+            //초기화
+            ListItem.mCardItems = mutableListOf()
+
+            list.forEach {
+                //이후 데이터를 저장
+                ListItem.mCardItems.add(CardItem(it.siteName, it.dateTime, it.thumbNailUrl, false))
+
+            }
+            binding.rvSearch.adapter?.notifyItemRangeChanged(0, list.size)
         }
         return binding.root
     }
@@ -69,9 +81,9 @@ class SearchFragment : Fragment() {
         })
         binding.btnSearchOk.setOnClickListener {
 
-            val str = binding.svSearchImg.query
+            val query = binding.svSearchImg.query.toString()
             //데이터 전달
-
+            fetchSearchImages(query)
             hideKeyboard()
         }
     }
@@ -83,15 +95,17 @@ class SearchFragment : Fragment() {
     }
 
     //데이터 요청 / 받기
-    private fun fetchSearchImages(query:String){
-        CoroutineScope(Dispatchers.Main).launch{
-            val images = searchImages(query)
-            _searchImages.value = images
+    private fun fetchSearchImages(query: String) {
+        CoroutineScope(Dispatchers.Main).launch {
+            val documents = searchImages(query)
+            _searchImages.value = documents
         }
     }
+
     private suspend fun searchImages(query: String) = withContext(Dispatchers.IO) {
         RetrofitInstance.api.searchImages(query = query).documents
     }
+
 
     companion object {
         @JvmStatic

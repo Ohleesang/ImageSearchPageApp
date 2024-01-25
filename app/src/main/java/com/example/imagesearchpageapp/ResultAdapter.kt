@@ -1,14 +1,20 @@
 package com.example.imagesearchpageapp
 
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.imagesearchpageapp.databinding.RecyclerViewItemBinding
+import okhttp3.internal.notify
 
 
-class ResultAdapter(private val mCardItems: MutableList<CardItem>) :
+class ResultAdapter(private val context: Context,private val mCardItems: MutableList<CardItem>) :
     RecyclerView.Adapter<ResultAdapter.ViewHolder>() {
+
 
     inner class ViewHolder(binding: RecyclerViewItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -22,7 +28,6 @@ class ResultAdapter(private val mCardItems: MutableList<CardItem>) :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding =
             RecyclerViewItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-
         return ViewHolder(binding)
     }
 
@@ -30,7 +35,12 @@ class ResultAdapter(private val mCardItems: MutableList<CardItem>) :
         val item = mCardItems[position]
 
         holder.apply {
-            thumbNailImage.setImageResource(item.thumbNaileUri)
+
+            Glide.with(context)
+                .load(item.thumbNaileUrl)
+                .diskCacheStrategy(DiskCacheStrategy.DATA)
+                .into(thumbNailImage)
+
             siteName.text = item.siteName
             dateTime.text = item.dateTime
             if (item.isLike) {
@@ -72,5 +82,9 @@ class ResultAdapter(private val mCardItems: MutableList<CardItem>) :
         }
     }
 
+    fun updateUI(){
+        Toast.makeText(context,"updateUI!",Toast.LENGTH_SHORT).show()
+        notifyDataSetChanged()
+    }
 
 }

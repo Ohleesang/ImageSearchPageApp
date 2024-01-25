@@ -1,9 +1,9 @@
 package com.example.imagesearchpageapp
 
 data class CardItem(
-    val thumbNaileUri: Int,
     val siteName: String,
     val dateTime: String,
+    val thumbNaileUrl: String,
     var isLike: Boolean,
 )
 
