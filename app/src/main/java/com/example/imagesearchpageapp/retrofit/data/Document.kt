@@ -2,7 +2,7 @@ package com.example.imagesearchpageapp.retrofit.data
 
 import com.google.gson.annotations.SerializedName
 
-data class Document(
+open class Document(
 //    val collection: String,
     @SerializedName("datetime")
     val dateTime: String,//dateTime

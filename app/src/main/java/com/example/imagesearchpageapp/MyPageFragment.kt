@@ -30,10 +30,10 @@ class MyPageFragment : Fragment() {
     ): View? {
         binding = FragmentMyPageBinding.inflate(inflater,container,false)
         binding.rvMyPage.apply{
-            adapter = ResultAdapter(requireContext(),ListItem.likeCardItems)
+            adapter = ResultAdapter(requireContext(),ListItem.likeItems)
             layoutManager = GridLayoutManager(requireContext(),2)
         }
-        ListItem.likeCardItems.sortBy { it.siteName }
+        ListItem.likeItems.sortBy { it.dateTime }
         return binding.root
     }
 

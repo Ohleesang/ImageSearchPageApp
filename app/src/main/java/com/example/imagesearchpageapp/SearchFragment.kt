@@ -8,9 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.widget.SearchView
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.switchMap
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.imagesearchpageapp.databinding.FragmentSearchBinding
 import com.example.imagesearchpageapp.retrofit.RetrofitInstance
@@ -29,11 +27,9 @@ class SearchFragment : Fragment() {
 
     private lateinit var binding: FragmentSearchBinding
 
-    private val _searchImages = MutableLiveData<List<Document>>()
+    private lateinit var resultAdapter: ResultAdapter
 
-    //    private var searchImages : LiveData<List<Document>> = _searchImages.switchMap {
-    //        MutableLiveData(it)
-    //    }
+    private val _searchImages = MutableLiveData<List<Document>>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -47,26 +43,24 @@ class SearchFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View? {
         binding = FragmentSearchBinding.inflate(inflater, container, false)
+        resultAdapter = ResultAdapter(requireContext(), ListItem.mItems)
         binding.rvSearch.apply {
-            adapter = ResultAdapter(requireContext(), ListItem.mCardItems)
+            adapter = resultAdapter
             layoutManager = GridLayoutManager(requireContext(), 2)
         }
-        _searchImages.observe(viewLifecycleOwner) { list ->
-            //초기화
-            ListItem.mCardItems = mutableListOf()
 
-            list.forEach {
-                //이후 데이터를 저장
-                ListItem.mCardItems.add(CardItem(it.siteName, it.dateTime, it.thumbNailUrl, false))
-
-            }
-            binding.rvSearch.adapter?.notifyItemRangeChanged(0, list.size)
-        }
         return binding.root
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
+        // 서버에 받아온 데이터가 변경이 일어날때 처리
+        _searchImages.observe(viewLifecycleOwner) { list ->
+            resultAdapter.updateUI()
+        }
+
+        // 검색 기능
         binding.svSearchImg.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 //데이터 전달
@@ -98,6 +92,12 @@ class SearchFragment : Fragment() {
     private fun fetchSearchImages(query: String) {
         CoroutineScope(Dispatchers.Main).launch {
             val documents = searchImages(query)
+            val newItems = mutableListOf<Item>()
+            documents.forEach {
+                //이후 데이터를 저장
+                newItems.add(Item(false,it.dateTime,it.siteName,it.thumbNailUrl))
+            }
+            ListItem.mItems = newItems
             _searchImages.value = documents
         }
     }
@@ -110,7 +110,7 @@ class SearchFragment : Fragment() {
     companion object {
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            MyPageFragment().apply {
+            SearchFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)

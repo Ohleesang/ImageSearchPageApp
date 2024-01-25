@@ -1,23 +1,25 @@
 package com.example.imagesearchpageapp
 
-data class CardItem(
-    val siteName: String,
-    val dateTime: String,
-    val thumbNaileUrl: String,
-    var isLike: Boolean,
-)
+import com.example.imagesearchpageapp.retrofit.data.Document
+
+class Item(
+    var isLike: Boolean = false,
+    dateTime: String,
+    siteName: String,
+    thumbNailUrl: String,
+) : Document(dateTime, siteName, thumbNailUrl)
 
 object ListItem {
-    var mCardItems = mutableListOf<CardItem>()
-    val likeCardItems = mutableListOf<CardItem>()
+    var mItems = mutableListOf<Item>()
+    val likeItems = mutableListOf<Item>()
 
-    fun addLikeItems(cardItem: CardItem) {
-        likeCardItems.add(cardItem)
+    fun addLikeItems(item: Item) {
+        likeItems.add(item)
     }
 
-    fun deleteLikeItems(cardItem: CardItem): Int {
-        val idx = likeCardItems.indexOf(cardItem)
-        likeCardItems.removeAt(idx)
+    fun deleteLikeItems(item: Item): Int {
+        val idx = likeItems.indexOf(item)
+        likeItems.removeAt(idx)
         return idx
     }
 }

@@ -4,15 +4,13 @@ package com.example.imagesearchpageapp
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.imagesearchpageapp.databinding.RecyclerViewItemBinding
-import okhttp3.internal.notify
 
 
-class ResultAdapter(private val context: Context,private val mCardItems: MutableList<CardItem>) :
+class ResultAdapter(private val context: Context,private var mItems: MutableList<Item>) :
     RecyclerView.Adapter<ResultAdapter.ViewHolder>() {
 
 
@@ -32,12 +30,13 @@ class ResultAdapter(private val context: Context,private val mCardItems: Mutable
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = mCardItems[position]
+        val item = mItems[position]
 
         holder.apply {
 
+            //Url 이미지 추가
             Glide.with(context)
-                .load(item.thumbNaileUrl)
+                .load(item.thumbNailUrl)
                 .diskCacheStrategy(DiskCacheStrategy.DATA)
                 .into(thumbNailImage)
 
@@ -46,7 +45,7 @@ class ResultAdapter(private val context: Context,private val mCardItems: Mutable
             if (item.isLike) {
                 // 돌아올 때 좋아요 버튼 사진 유지
                 likeAnimation.setMinAndMaxProgress(1f, 1f)
-                likeAnimation.playAnimation()
+//                likeAnimation.playAnimation()
             }
         }
 
@@ -65,26 +64,28 @@ class ResultAdapter(private val context: Context,private val mCardItems: Mutable
     }
 
 
-    override fun getItemCount() = mCardItems.size
+    override fun getItemCount() = mItems.size
 
 
     /**
      * 데이터가 업데이트 될때 내 보관함에서 삭제되면 다시 그림
      */
-    private fun updateData(cardItem: CardItem) {
+    private fun updateData(item: Item) {
         val idx : Int
 
-        if (cardItem.isLike) ListItem.addLikeItems(cardItem)
+        if (item.isLike) ListItem.addLikeItems(item)
         else {
-            idx = ListItem.deleteLikeItems(cardItem)
-            if (mCardItems == ListItem.likeCardItems)
+            idx = ListItem.deleteLikeItems(item)
+            if (mItems == ListItem.likeItems)
                 notifyItemRemoved(idx)
         }
     }
 
-    fun updateUI(){
-        Toast.makeText(context,"updateUI!",Toast.LENGTH_SHORT).show()
+    fun updateUI() {
+        mItems = ListItem.mItems
         notifyDataSetChanged()
     }
+
+
 
 }

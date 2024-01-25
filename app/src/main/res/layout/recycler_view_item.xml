@@ -15,14 +15,15 @@
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/lav_heart"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="8dp"
-            app:lottie_rawRes="@raw/heart_animation"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_site_name"
+            app:layout_constraintEnd_toEndOf="@+id/iv_thumb_nail"
+            app:layout_constraintTop_toTopOf="@+id/tv_site_name"
             app:lottie_autoPlay="false"
             app:lottie_loop="false"
-            app:layout_constraintEnd_toEndOf="@+id/iv_thumb_nail"
-            app:layout_constraintTop_toBottomOf="@+id/iv_thumb_nail" />
+            app:lottie_rawRes="@raw/heart_animation" />
 
         <ImageView
             android:id="@+id/iv_thumb_nail"
@@ -49,6 +50,7 @@
             android:id="@+id/tv_date_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:text="date_time"
             app:layout_constraintStart_toStartOf="parent"
