@@ -50,7 +50,7 @@ class ResultAdapter(private val mItems: MutableList<Item>) :
                 playAnimation()
             }
             item.isLike = !item.isLike
-            updateData(item, position)
+            updateData(item)
         }
     }
 
@@ -61,12 +61,14 @@ class ResultAdapter(private val mItems: MutableList<Item>) :
     /**
      * 데이터가 업데이트 될때 내 보관함에서 삭제되면 다시 그림
      */
-    private fun updateData(item: Item, position: Int) {
+    private fun updateData(item: Item) {
+        val idx : Int
+
         if (item.isLike) List.addLikeItems(item)
         else {
-            List.deleteLikeItems(item)
+            idx = List.deleteLikeItems(item)
             if (mItems == List.likeItems)
-                notifyItemRemoved(position)
+                notifyItemRemoved(idx)
         }
     }
 
