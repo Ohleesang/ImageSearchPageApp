@@ -37,6 +37,7 @@ class MyPageFragment : Fragment() {
             adapter = ResultAdapter(List.likeItems)
             layoutManager = GridLayoutManager(requireContext(),2)
         }
+        List.likeItems.sortBy { it.siteName }
         return binding.root
     }
 
