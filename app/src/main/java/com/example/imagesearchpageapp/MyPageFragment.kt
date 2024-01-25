@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.imagesearchpageapp.databinding.FragmentMyPageBinding
-import com.example.imagesearchpageapp.databinding.FragmentSearchBinding
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -34,10 +33,10 @@ class MyPageFragment : Fragment() {
     ): View? {
         binding = FragmentMyPageBinding.inflate(inflater,container,false)
         binding.rvMyPage.apply{
-            adapter = ResultAdapter(List.likeItems)
+            adapter = ResultAdapter(ListItem.likeCardItems)
             layoutManager = GridLayoutManager(requireContext(),2)
         }
-        List.likeItems.sortBy { it.siteName }
+        ListItem.likeCardItems.sortBy { it.siteName }
         return binding.root
     }
 

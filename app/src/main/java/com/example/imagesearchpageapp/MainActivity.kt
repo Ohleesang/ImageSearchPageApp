@@ -41,8 +41,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setDummyData() {
-        for (i in 0..10) List.mItems.add(
-            Item(R.drawable.img_dummy_data, "Naver $i", "201401240422", false)
+        for (i in 0..10) ListItem.mCardItems.add(
+            CardItem(R.drawable.img_dummy_data, "Naver $i", "201401240422", false)
         )
     }
 }

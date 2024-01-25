@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.imagesearchpageapp.databinding.RecyclerViewItemBinding
 
 
-class ResultAdapter(private val mItems: MutableList<Item>) :
+class ResultAdapter(private val mCardItems: MutableList<CardItem>) :
     RecyclerView.Adapter<ResultAdapter.ViewHolder>() {
 
     inner class ViewHolder(binding: RecyclerViewItemBinding) :
@@ -27,7 +27,7 @@ class ResultAdapter(private val mItems: MutableList<Item>) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = mItems[position]
+        val item = mCardItems[position]
 
         holder.apply {
             thumbNailImage.setImageResource(item.thumbNaileUri)
@@ -55,19 +55,19 @@ class ResultAdapter(private val mItems: MutableList<Item>) :
     }
 
 
-    override fun getItemCount() = mItems.size
+    override fun getItemCount() = mCardItems.size
 
 
     /**
      * 데이터가 업데이트 될때 내 보관함에서 삭제되면 다시 그림
      */
-    private fun updateData(item: Item) {
+    private fun updateData(cardItem: CardItem) {
         val idx : Int
 
-        if (item.isLike) List.addLikeItems(item)
+        if (cardItem.isLike) ListItem.addLikeItems(cardItem)
         else {
-            idx = List.deleteLikeItems(item)
-            if (mItems == List.likeItems)
+            idx = ListItem.deleteLikeItems(cardItem)
+            if (mCardItems == ListItem.likeCardItems)
                 notifyItemRemoved(idx)
         }
     }

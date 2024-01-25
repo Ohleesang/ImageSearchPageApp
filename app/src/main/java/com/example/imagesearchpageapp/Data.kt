@@ -1,23 +1,23 @@
 package com.example.imagesearchpageapp
 
-data class Item(
+data class CardItem(
     val thumbNaileUri: Int,
     val siteName: String,
     val dateTime: String,
     var isLike: Boolean,
 )
 
-object List {
-    val mItems = mutableListOf<Item>()
-    val likeItems = mutableListOf<Item>()
+object ListItem {
+    var mCardItems = mutableListOf<CardItem>()
+    val likeCardItems = mutableListOf<CardItem>()
 
-    fun addLikeItems(item: Item) {
-        likeItems.add(item)
+    fun addLikeItems(cardItem: CardItem) {
+        likeCardItems.add(cardItem)
     }
 
-    fun deleteLikeItems(item: Item): Int {
-        val idx = likeItems.indexOf(item)
-        likeItems.removeAt(idx)
+    fun deleteLikeItems(cardItem: CardItem): Int {
+        val idx = likeCardItems.indexOf(cardItem)
+        likeCardItems.removeAt(idx)
         return idx
     }
 }

@@ -50,4 +50,11 @@ dependencies {
 
     //lottie 애니메이션 추가
     implementation("com.airbnb.android:lottie:4.1.0")
+
+    //Retrofit,Converter-Gson
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    // OKHttp for 통신 로그
+    implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
 }
