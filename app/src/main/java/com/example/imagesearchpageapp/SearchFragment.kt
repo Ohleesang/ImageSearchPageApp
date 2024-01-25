@@ -1,10 +1,13 @@
 package com.example.imagesearchpageapp
 
 import android.os.Bundle
+import android.content.Context
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.imagesearchpageapp.databinding.FragmentSearchBinding
 
@@ -42,8 +45,29 @@ class SearchFragment : Fragment() {
             adapter = ResultAdapter(List.mItems)
             layoutManager = GridLayoutManager(requireContext(),2)
         }
+        binding.svSearchImg.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                //데이터 전달
+                return false
+            }
 
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return true
+            }
+
+        })
+        binding.btnSearchOk.setOnClickListener{
+
+            val str = binding.svSearchImg.query
+            //데이터 전달
+
+            hideKeyboard()
+        }
         return binding.root
+    }
+    private fun hideKeyboard() {
+        val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(binding.root.windowToken, 0)
     }
 
     companion object {
