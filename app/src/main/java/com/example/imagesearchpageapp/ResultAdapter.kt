@@ -1,14 +1,18 @@
 package com.example.imagesearchpageapp
 
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.imagesearchpageapp.databinding.RecyclerViewItemBinding
 
 
-class ResultAdapter(private val mItems: MutableList<Item>) :
+class ResultAdapter(private val context: Context,private var mItems: MutableList<Item>) :
     RecyclerView.Adapter<ResultAdapter.ViewHolder>() {
+
 
     inner class ViewHolder(binding: RecyclerViewItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -22,7 +26,6 @@ class ResultAdapter(private val mItems: MutableList<Item>) :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding =
             RecyclerViewItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-
         return ViewHolder(binding)
     }
 
@@ -30,13 +33,19 @@ class ResultAdapter(private val mItems: MutableList<Item>) :
         val item = mItems[position]
 
         holder.apply {
-            thumbNailImage.setImageResource(item.thumbNaileUri)
+
+            //Url 이미지 추가
+            Glide.with(context)
+                .load(item.thumbNailUrl)
+                .diskCacheStrategy(DiskCacheStrategy.DATA)
+                .into(thumbNailImage)
+
             siteName.text = item.siteName
             dateTime.text = item.dateTime
             if (item.isLike) {
                 // 돌아올 때 좋아요 버튼 사진 유지
                 likeAnimation.setMinAndMaxProgress(1f, 1f)
-                likeAnimation.playAnimation()
+//                likeAnimation.playAnimation()
             }
         }
 
@@ -64,13 +73,19 @@ class ResultAdapter(private val mItems: MutableList<Item>) :
     private fun updateData(item: Item) {
         val idx : Int
 
-        if (item.isLike) List.addLikeItems(item)
+        if (item.isLike) ListItem.addLikeItems(item)
         else {
-            idx = List.deleteLikeItems(item)
-            if (mItems == List.likeItems)
+            idx = ListItem.deleteLikeItems(item)
+            if (mItems == ListItem.likeItems)
                 notifyItemRemoved(idx)
         }
     }
+
+    fun updateUI() {
+        mItems = ListItem.mItems
+        notifyDataSetChanged()
+    }
+
 
 
 }
