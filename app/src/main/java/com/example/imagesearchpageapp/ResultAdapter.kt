@@ -44,8 +44,12 @@ class ResultAdapter(private val context: Context,private var mItems: MutableList
             dateTime.text = item.dateTime
             if (item.isLike) {
                 // 돌아올 때 좋아요 버튼 사진 유지
-                likeAnimation.setMinAndMaxProgress(1f, 1f)
-//                likeAnimation.playAnimation()
+                likeAnimation.setMinAndMaxProgress(0.5f, 1f)
+                likeAnimation.playAnimation()
+            }
+            else{
+                likeAnimation.setMinAndMaxProgress(0f, 0f)
+                likeAnimation.playAnimation()
             }
         }
 
