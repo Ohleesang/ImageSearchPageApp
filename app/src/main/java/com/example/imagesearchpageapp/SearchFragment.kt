@@ -32,7 +32,6 @@ class SearchFragment : Fragment() {
 
     private lateinit var resultAdapter: ResultAdapter
 
-    private val _searchImages = MutableLiveData<List<Document>>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -47,10 +46,18 @@ class SearchFragment : Fragment() {
     ): View? {
         binding = FragmentSearchBinding.inflate(inflater, container, false)
         resultAdapter = ResultAdapter(requireContext(), ListItem.mItems)
-        binding.rvSearch.apply {
-            adapter = resultAdapter
-            layoutManager = GridLayoutManager(requireContext(), 2)
+        with(binding) {
+            //RecyclerView 등록
+            rvSearch.apply {
+                adapter = resultAdapter
+                layoutManager = GridLayoutManager(requireContext(), 2)
+            }
+            //검색 부분 구성
+            val savedQuery = UserData(requireContext()).loadData()
+            svSearchImg.setQuery(savedQuery, false)
+            tvSearchImg.text = savedQuery
         }
+
 
         return binding.root
     }
@@ -58,31 +65,38 @@ class SearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        // 서버에 받아온 데이터가 변경이 일어날때 처리
-        _searchImages.observe(viewLifecycleOwner) { list ->
-            resultAdapter.updateUI()
-        }
-
         // 검색 기능
-        binding.svSearchImg.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                //데이터 전달
-                query?.let { fetchSearchImages(it) }
+        binding.svSearchImg.apply{
+            setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    //데이터 전달
+                    query?.let {
+                        fetchSearchImages(it)
+                    }
 
-                return false
+                    return true //hideKeyboard()
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    newText?.let {
+                        UserData(requireContext()).saveData(newText)
+                    }
+                    return true
+                }
+
+            })
+            setOnQueryTextFocusChangeListener { _, hasFocus ->
+                if(hasFocus) binding.tvSearchImg.visibility = View.GONE
+                else binding.tvSearchImg.visibility = View.VISIBLE
             }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                return true
-            }
-
-        })
+        }
         binding.btnSearchOk.setOnClickListener {
 
             val query = binding.svSearchImg.query.toString()
             //데이터 전달
             if (query.isNotBlank()) {
                 fetchSearchImages(query)
+                UserData(requireContext()).saveData(query)
                 hideKeyboard()
             } else {
                 Snackbar.make(view, "검색어를 입력해주세요!", Snackbar.LENGTH_SHORT).show()
@@ -107,7 +121,7 @@ class SearchFragment : Fragment() {
                 newItems.add(Item(false, parsedDateTime, it.siteName, it.thumbNailUrl))
             }
             ListItem.mItems = newItems
-            _searchImages.value = documents
+            resultAdapter.updateUI()
         }
     }
 
