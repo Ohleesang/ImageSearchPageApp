@@ -13,10 +13,13 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.imagesearchpageapp.databinding.FragmentSearchBinding
 import com.example.imagesearchpageapp.retrofit.RetrofitInstance
 import com.example.imagesearchpageapp.retrofit.data.Document
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -29,7 +32,6 @@ class SearchFragment : Fragment() {
 
     private lateinit var resultAdapter: ResultAdapter
 
-    private val _searchImages = MutableLiveData<List<Document>>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -44,10 +46,18 @@ class SearchFragment : Fragment() {
     ): View? {
         binding = FragmentSearchBinding.inflate(inflater, container, false)
         resultAdapter = ResultAdapter(requireContext(), ListItem.mItems)
-        binding.rvSearch.apply {
-            adapter = resultAdapter
-            layoutManager = GridLayoutManager(requireContext(), 2)
+        with(binding) {
+            //RecyclerView 등록
+            rvSearch.apply {
+                adapter = resultAdapter
+                layoutManager = GridLayoutManager(requireContext(), 2)
+            }
+            //검색 부분 구성
+            val savedQuery = UserData(requireContext()).loadData()
+            svSearchImg.setQuery(savedQuery, false)
+            tvSearchImg.text = savedQuery
         }
+
 
         return binding.root
     }
@@ -55,30 +65,42 @@ class SearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        // 서버에 받아온 데이터가 변경이 일어날때 처리
-        _searchImages.observe(viewLifecycleOwner) { list ->
-            resultAdapter.updateUI()
-        }
-
         // 검색 기능
-        binding.svSearchImg.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                //데이터 전달
-                fetchSearchImages(query!!)
-                return false
-            }
+        binding.svSearchImg.apply{
+            setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    //데이터 전달
+                    query?.let {
+                        fetchSearchImages(it)
+                    }
 
-            override fun onQueryTextChange(newText: String?): Boolean {
-                return true
-            }
+                    return true //hideKeyboard()
+                }
 
-        })
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    newText?.let {
+                        UserData(requireContext()).saveData(newText)
+                    }
+                    return true
+                }
+
+            })
+            setOnQueryTextFocusChangeListener { _, hasFocus ->
+                if(hasFocus) binding.tvSearchImg.visibility = View.GONE
+                else binding.tvSearchImg.visibility = View.VISIBLE
+            }
+        }
         binding.btnSearchOk.setOnClickListener {
 
             val query = binding.svSearchImg.query.toString()
             //데이터 전달
-            fetchSearchImages(query)
-            hideKeyboard()
+            if (query.isNotBlank()) {
+                fetchSearchImages(query)
+                UserData(requireContext()).saveData(query)
+                hideKeyboard()
+            } else {
+                Snackbar.make(view, "검색어를 입력해주세요!", Snackbar.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -95,11 +117,26 @@ class SearchFragment : Fragment() {
             val newItems = mutableListOf<Item>()
             documents.forEach {
                 //이후 데이터를 저장
-                newItems.add(Item(false,it.dateTime,it.siteName,it.thumbNailUrl))
+                val parsedDateTime = parsingDateTime(it.dateTime)
+                newItems.add(Item(false, parsedDateTime, it.siteName, it.thumbNailUrl))
             }
             ListItem.mItems = newItems
-            _searchImages.value = documents
+            resultAdapter.updateUI()
         }
+    }
+
+
+    // dateFormatter 를 이용
+    private fun parsingDateTime(oldDateTime: String): String {
+
+
+        // oldDateTime 을 LocalDateTime 객체로 파싱
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
+        val parsedDateTime = LocalDateTime.parse(oldDateTime, formatter)
+
+        // LocalDateTime 값을 새로 지정한 Formatter 값으로 바꿔서 Return
+        val outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+        return parsedDateTime.format(outputFormatter)
     }
 
     private suspend fun searchImages(query: String) = withContext(Dispatchers.IO) {
