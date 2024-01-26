@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.imagesearchpageapp.databinding.FragmentSearchBinding
 import com.example.imagesearchpageapp.retrofit.RetrofitInstance
 import com.example.imagesearchpageapp.retrofit.data.Document
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -66,7 +67,8 @@ class SearchFragment : Fragment() {
         binding.svSearchImg.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 //데이터 전달
-                fetchSearchImages(query!!)
+                query?.let { fetchSearchImages(it) }
+
                 return false
             }
 
@@ -79,8 +81,12 @@ class SearchFragment : Fragment() {
 
             val query = binding.svSearchImg.query.toString()
             //데이터 전달
-            fetchSearchImages(query)
-            hideKeyboard()
+            if (query.isNotBlank()) {
+                fetchSearchImages(query)
+                hideKeyboard()
+            } else {
+                Snackbar.make(view, "검색어를 입력해주세요!", Snackbar.LENGTH_SHORT).show()
+            }
         }
     }
 
