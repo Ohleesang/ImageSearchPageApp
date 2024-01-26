@@ -23,3 +23,7 @@ object ListItem {
         return idx
     }
 }
+
+object SharedPerferences {
+    const val SAVE_QUERY = "SAVE_QUERY"
+}
