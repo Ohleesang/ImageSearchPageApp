@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_image_search">
+
+    <fragment
+        android:id="@+id/navigation_image_search"
+        android:name="com.example.imagesearchpageapp.ui.search.SearchFragment"
+
+        tools:layout="@layout/fragment_search" />
+
+    <fragment
+        android:id="@+id/navigation_my_page"
+        android:name="com.example.imagesearchpageapp.ui.dashboard.MyPageFragment"
+
+        tools:layout="@layout/fragment_my_page" />
+
+</navigation>
