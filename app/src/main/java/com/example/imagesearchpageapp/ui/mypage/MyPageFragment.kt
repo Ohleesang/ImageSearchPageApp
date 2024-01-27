@@ -1,4 +1,4 @@
-package com.example.imagesearchpageapp.ui.dashboard
+package com.example.imagesearchpageapp.ui.mypage
 
 import android.os.Bundle
 import android.view.LayoutInflater

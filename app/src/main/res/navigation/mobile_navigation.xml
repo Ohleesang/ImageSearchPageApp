@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/navigation_my_page"
-        android:name="com.example.imagesearchpageapp.ui.dashboard.MyPageFragment"
+        android:name="com.example.imagesearchpageapp.ui.mypage.MyPageFragment"
 
         tools:layout="@layout/fragment_my_page" />
 

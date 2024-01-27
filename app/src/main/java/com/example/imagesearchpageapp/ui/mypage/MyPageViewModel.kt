@@ -1,4 +1,4 @@
-package com.example.imagesearchpageapp.ui.dashboard
+package com.example.imagesearchpageapp.ui.mypage
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
