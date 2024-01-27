@@ -1,41 +1,28 @@
 package com.example.imagesearchpageapp
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
 import com.example.imagesearchpageapp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
-    private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
+
+    private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        initFragment()
 
+        val navView: BottomNavigationView = binding.navView
+
+        val navController = findNavController(R.id.nav_host_fragment_activity_main)
+
+        navView.setupWithNavController(navController)
     }
-
-    private fun initFragment() {
-
-        // 초기 설정
-        setFragment(SearchFragment())
-        //버튼 클릭시 이동
-        binding.apply {
-            btnFragmentSearch.setOnClickListener {
-                setFragment(SearchFragment())
-            }
-            btnFragmentMyPage.setOnClickListener {
-                setFragment(MyPageFragment())
-            }
-        }
-
-    }
-
-    private fun setFragment(frag: Fragment) {
-        supportFragmentManager.beginTransaction()
-            .replace(binding.flMain.id, frag)
-            .setReorderingAllowed(true)
-            .addToBackStack("")
-            .commit()
-    }
-
 }
