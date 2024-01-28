@@ -20,6 +20,7 @@ class SearchViewModel : ViewModel() {
     private val _savedQuery = MutableLiveData<String?>()
     val savedQuery: LiveData<String?> get() = _savedQuery
 
+
     /**
      *  이미지 검색
      */
@@ -47,11 +48,11 @@ class SearchViewModel : ViewModel() {
      */
     fun setSavedQuery(context: Context,query :String?){
         _savedQuery.value = query
-        UserData(context).saveData(query)
+        UserData(context).saveQueryData(query)
     }
 
     fun initSavedQuery(context: Context){
-        val savedUserQuery = UserData(context).loadData()
+        val savedUserQuery = UserData(context).loadQueryData()
         _savedQuery.value = savedUserQuery
     }
 }

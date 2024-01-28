@@ -30,13 +30,18 @@ class MyPageFragment : Fragment(),OnClickItem {
             layoutManager = GridLayoutManager(requireContext(), 2)
             adapter = resultAdapter
         }
-        resultAdapter.setOnClickedItem(this)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        resultAdapter.submitList(myPageViewModel.likeList.value)
 
+        //클릭 인터페이스 등록
+        resultAdapter.setOnClickedItem(this)
+
+        //SharedPreference 의 값을 불러 들어서 초기화
+        myPageViewModel.initLikeList(requireContext())
+
+        //리스트 값 변경 되면 자동으로 UI 업데이트
         myPageViewModel.likeList.observe(viewLifecycleOwner){ likeData ->
             resultAdapter.submitList(likeData?.toList())
         }
@@ -48,6 +53,6 @@ class MyPageFragment : Fragment(),OnClickItem {
     }
 
     override fun onClick(item: Item) {
-        myPageViewModel.removeLikeList(item)
+        myPageViewModel.removeLikeList(requireContext(),item)
     }
 }
