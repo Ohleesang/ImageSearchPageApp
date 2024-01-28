@@ -1,12 +1,13 @@
 package com.example.imagesearchpageapp.ui.search
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.imagesearchpageapp.ResultAdapter
@@ -31,26 +32,60 @@ class SearchFragment : Fragment() {
             layoutManager = GridLayoutManager(requireContext(), 2)
             adapter = resultAdapter
         }
+
+        //기존에 저장된 검색어 값 불러오기
+        searchViewModel.initSavedQuery(requireContext())
+
+        //앱 실행시 저장된 쿼리값 보여주기
+        binding.svSearchImg.apply {
+            onActionViewExpanded() // SearchView를 확장
+            clearFocus() // 포커스를 제거합니다.
+        }
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        searchViewModel.itemList.observe(viewLifecycleOwner, Observer { newData ->
+        searchViewModel.itemList.observe(viewLifecycleOwner) { newData ->
             resultAdapter.submitList(newData.toList())
-        })
+        }
 
-        binding.svSearchImg.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                searchViewModel.fetchSearchImage(query)
-                return false
-            }
+        searchViewModel.savedQuery.observe(viewLifecycleOwner) { savedQuery ->
+            binding.svSearchImg.setQuery(savedQuery, false)
+        }
 
-            override fun onQueryTextChange(newText: String?): Boolean {
-                return false
-            }
 
-        })
+        binding.svSearchImg.apply {
+            setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    searchViewModel.fetchSearchImage(query)
+                    searchViewModel.setSavedQuery(requireContext(), query)
+                    return false
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    return false
+                }
+
+            })
+
+        }
+
+        binding.btnSearchOk.setOnClickListener {
+            val query = binding.svSearchImg.query.toString()
+            searchViewModel.fetchSearchImage(query)
+            searchViewModel.setSavedQuery(requireContext(), query)
+            hideKeyboard()
+
+        }
+    }
+
+
+    //키보드 내리기
+    private fun hideKeyboard() {
+        val imm =
+            requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(binding.root.windowToken, 0)
     }
 
 

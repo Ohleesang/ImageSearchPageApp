@@ -1,4 +1,4 @@
-package com.example.imagesearchpageapp
+package com.example.imagesearchpageapp.data
 
 import com.example.imagesearchpageapp.retrofit.data.Document
 import java.time.LocalDateTime
@@ -24,8 +24,4 @@ data class Item(
         val outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
         return parsedDateTime.format(outputFormatter)
     }
-}
-
-object SharedPerferences {
-    const val SAVE_QUERY = "SAVE_QUERY"
 }

@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.example.imagesearchpageapp.data.Item
 import com.example.imagesearchpageapp.databinding.RecyclerViewItemBinding
 
 class ResultAdapter : ListAdapter<Item, ResultAdapter.ResultViewHolder>(DIFF_CALLBACK) {
