@@ -39,7 +39,7 @@ class SearchFragment : Fragment() {
         //앱 실행시 저장된 쿼리값 보여주기
         binding.svSearchImg.apply {
             onActionViewExpanded() // SearchView를 확장
-            clearFocus() // 포커스를 제거합니다.
+            clearFocus() // 포커스를 제거
         }
         return binding.root
     }
