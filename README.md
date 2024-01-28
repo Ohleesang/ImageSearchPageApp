@@ -19,9 +19,9 @@
 ## 1.  A타입에서 달라지는 기능
 
 - 공통
-    - [ ]  MainActivity의 하단 메뉴를 Bottom Navigation 또는 ViewPager+tablayout으로 변경
-    - [ ]  MVVM 패턴을 적용합니다. (ViewModel, LiveData)
-    - [ ]  검색 결과 화면은 보관함을 다녀와도 유지됩니다.
+    - [x]  MainActivity의 하단 메뉴를 Bottom Navigation 또는 ViewPager+tablayout으로 변경
+    - [x]  MVVM 패턴을 적용합니다. (ViewModel, LiveData)
+    - [x]  검색 결과 화면은 보관함을 다녀와도 유지됩니다.
     - [ ]  보관한 이미지 리스트는 앱 재시작 후 다시 보여야 합니다.
     
 - 첫 번째 fragment : 검색 결과
