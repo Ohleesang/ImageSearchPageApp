@@ -38,6 +38,7 @@ class SearchViewModel : ViewModel() {
         documents.forEach {
             newItems.add(Item(false, it))
         }
+        newItems.sortByDescending { it.document.dateTime }
         newItems
     }
 
