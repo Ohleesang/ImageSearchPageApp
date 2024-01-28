@@ -38,7 +38,7 @@ class MyPageFragment : Fragment(),OnClickItem {
         resultAdapter.submitList(myPageViewModel.likeList.value)
 
         myPageViewModel.likeList.observe(viewLifecycleOwner){ likeData ->
-            resultAdapter.submitList(likeData.toList())
+            resultAdapter.submitList(likeData?.toList())
         }
     }
 
@@ -47,7 +47,7 @@ class MyPageFragment : Fragment(),OnClickItem {
         _binding = null
     }
 
-    override fun onClick(item: Item) { // 삭제 하면됨 더하는게아니라
+    override fun onClick(item: Item) {
         myPageViewModel.removeLikeList(item)
     }
 }

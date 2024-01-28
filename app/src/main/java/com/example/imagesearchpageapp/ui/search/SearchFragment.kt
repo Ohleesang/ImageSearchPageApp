@@ -66,7 +66,7 @@ class SearchFragment : Fragment(),OnClickItem {
 
         //아이템 클릭시 좋아요 처리
         myPageViewModel.likeList.observe(viewLifecycleOwner){
-            //해당 어뎁터에서 좋아요 보여주는걸 처리해야하나...???
+            //
 
         }
 
@@ -113,6 +113,7 @@ class SearchFragment : Fragment(),OnClickItem {
     }
 
     override fun onClick(item: Item) {
-        myPageViewModel.addLikeList(item)
+        if(item.isLike) myPageViewModel.removeLikeList(item)
+        else myPageViewModel.addLikeList(item)
     }
 }

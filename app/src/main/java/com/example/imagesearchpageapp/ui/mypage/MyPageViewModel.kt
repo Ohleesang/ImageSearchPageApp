@@ -7,8 +7,8 @@ import com.example.imagesearchpageapp.data.Item
 
 class MyPageViewModel : ViewModel() {
 
-    private val _likeList = MutableLiveData<List<Item>>()
-    val likeList: LiveData<List<Item>> get() = _likeList
+    private val _likeList = MutableLiveData<List<Item>?>()
+    val likeList: LiveData<List<Item>?> get() = _likeList
 
     fun addLikeList(item: Item){
         item.isLike = !item.isLike
