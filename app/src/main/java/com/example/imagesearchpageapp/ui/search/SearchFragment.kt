@@ -36,9 +36,6 @@ class SearchFragment : Fragment(),OnClickItem {
             layoutManager = GridLayoutManager(requireContext(), 2)
             adapter = resultAdapter
         }
-        resultAdapter.setOnClickedItem(this)
-        //기존에 저장된 검색어 값 불러 오기
-        searchViewModel.initSavedQuery(requireContext())
 
         //앱 실행시 searchView 포커스 보여 주기
         binding.svSearchImg.apply {
@@ -49,6 +46,12 @@ class SearchFragment : Fragment(),OnClickItem {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        //클릭 인터페이스 연결
+        resultAdapter.setOnClickedItem(this)
+
+        //해당 저장된 쿼리값 불러오기
+        searchViewModel.initSavedQuery(requireContext())
 
         /**
          *  데이터가 변경되면 UI 변경 처리
@@ -107,7 +110,7 @@ class SearchFragment : Fragment(),OnClickItem {
     }
 
     override fun onClick(item: Item) {
-        if(item.isLike) myPageViewModel.removeLikeList(item)
-        else myPageViewModel.addLikeList(item)
+        if(item.isLike) myPageViewModel.removeLikeList(requireContext(),item)
+        else myPageViewModel.addLikeList(requireContext(),item)
     }
 }

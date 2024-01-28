@@ -39,7 +39,7 @@
             android:id="@+id/tv_site_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:text="Site_Name"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -50,8 +50,9 @@
             android:id="@+id/tv_date_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginBottom="4dp"
             android:text="date_time"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/tv_site_name"
             app:layout_constraintTop_toBottomOf="@+id/tv_site_name" />
     </androidx.constraintlayout.widget.ConstraintLayout>
