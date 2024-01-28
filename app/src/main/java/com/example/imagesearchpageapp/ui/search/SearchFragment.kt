@@ -64,12 +64,6 @@ class SearchFragment : Fragment(),OnClickItem {
             binding.svSearchImg.setQuery(savedQuery, false)
         }
 
-        //아이템 클릭시 좋아요 처리
-        myPageViewModel.likeList.observe(viewLifecycleOwner){
-            //
-
-        }
-
         /**
          *  검색 실행 해야 할때 searchViewModel 에게 기능을 실행 요청
          */

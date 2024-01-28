@@ -63,11 +63,34 @@ class ResultAdapter : ListAdapter<Item, ResultAdapter.ResultViewHolder>(DIFF_CAL
             siteName.text = item.document.siteName
             dateTime.text = item.document.dateTime
 
-            //클릭시 좋아요
+            /**
+             *  Like 애니메이션
+             */
+            //클릭시 애니메이션
             cardView.setOnClickListener {
                 onClickItem?.onClick(item)
-                //item 상태에따라 좋아요 표시
+                //item 상태에 따라 좋아요 표시/해제
+                likeAnimation.apply {
+                    speed =
+                        if (item.isLike) 2f else -6f
+                    if (item.isLike) setMinAndMaxProgress(0f, 1f)
+                    else setMinAndMaxProgress(0f, 0.5f)
+                    playAnimation()
+                }
             }
+
+            //다시 그릴 때 애니메이션
+            if (item.isLike) {
+                // 돌아올 때 좋아요 버튼 사진 유지
+                likeAnimation.setMinAndMaxProgress(0.5f, 1f)
+                likeAnimation.playAnimation()
+            }
+            else{
+                likeAnimation.setMinAndMaxProgress(0f, 0f)
+                likeAnimation.playAnimation()
+            }
+
+
         }
     }
 
