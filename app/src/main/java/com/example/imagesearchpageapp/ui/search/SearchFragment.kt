@@ -10,16 +10,20 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.imagesearchpageapp.OnClickItem
 import com.example.imagesearchpageapp.ResultAdapter
+import com.example.imagesearchpageapp.data.Item
 import com.example.imagesearchpageapp.databinding.FragmentSearchBinding
+import com.example.imagesearchpageapp.ui.mypage.MyPageViewModel
 
-class SearchFragment : Fragment() {
+class SearchFragment : Fragment(),OnClickItem {
 
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
 
 
     private val searchViewModel by lazy { ViewModelProvider(this)[SearchViewModel::class.java] }
+    private val myPageViewModel by lazy { ViewModelProvider(requireActivity())[MyPageViewModel::class.java] }
     private val resultAdapter by lazy { ResultAdapter() }
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,29 +36,43 @@ class SearchFragment : Fragment() {
             layoutManager = GridLayoutManager(requireContext(), 2)
             adapter = resultAdapter
         }
-
-        //기존에 저장된 검색어 값 불러오기
+        resultAdapter.setOnClickedItem(this)
+        //기존에 저장된 검색어 값 불러 오기
         searchViewModel.initSavedQuery(requireContext())
 
-        //앱 실행시 저장된 쿼리값 보여주기
+        //앱 실행시 searchView 포커스 보여 주기
         binding.svSearchImg.apply {
             onActionViewExpanded() // SearchView를 확장
-            clearFocus() // 포커스를 제거
+            clearFocus() // 포커스 를 제거
         }
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
+        /**
+         *  데이터가 변경되면 UI 변경 처리
+         */
+
+        //검색 되어 졌을때 결과를 보여 줘야 한다
         searchViewModel.itemList.observe(viewLifecycleOwner) { newData ->
             resultAdapter.submitList(newData.toList())
         }
 
+        //저장된 쿼리값 이 변경 되면 해당 쿼리값 을 저장
         searchViewModel.savedQuery.observe(viewLifecycleOwner) { savedQuery ->
             binding.svSearchImg.setQuery(savedQuery, false)
         }
 
+        //아이템 클릭시 좋아요 처리
+        myPageViewModel.likeList.observe(viewLifecycleOwner){
+            //해당 어뎁터에서 좋아요 보여주는걸 처리해야하나...???
 
+        }
+
+        /**
+         *  검색 실행 해야 할때 searchViewModel 에게 기능을 실행 요청
+         */
         binding.svSearchImg.apply {
             setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
@@ -92,5 +110,9 @@ class SearchFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onClick(item: Item) {
+        myPageViewModel.addLikeList(item)
     }
 }
