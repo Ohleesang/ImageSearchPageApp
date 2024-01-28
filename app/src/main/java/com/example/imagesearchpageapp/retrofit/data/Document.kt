@@ -2,13 +2,13 @@ package com.example.imagesearchpageapp.retrofit.data
 
 import com.google.gson.annotations.SerializedName
 
-open class Document(
+data class Document(
 //    val collection: String,
     @SerializedName("datetime")
-    val dateTime: String,//dateTime
+    var dateTime: String,//dateTime
 
     @SerializedName("display_sitename")
-    val siteName: String,//SiteName
+    var siteName: String,//SiteName
 //    val doc_url: String,
 //    val height: Int,
 //    val image_url: String,

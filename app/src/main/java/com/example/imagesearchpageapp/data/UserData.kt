@@ -1,4 +1,4 @@
-package com.example.imagesearchpageapp
+package com.example.imagesearchpageapp.data
 
 import android.content.Context
 
@@ -8,7 +8,7 @@ class UserData(private val context: Context) {
         const val USER_PREF = "user_pref"
     }
 
-    fun saveData(query: String) {
+    fun saveData(query: String?) {
 
         val pref = context.getSharedPreferences(USER_PREF, 0)
         val edit = pref.edit()// 수정 모드
