@@ -19,6 +19,7 @@ class MyPageFragment : Fragment(),OnClickItem {
     private val binding get() = _binding!!
 
     private val myPageViewModel by lazy { ViewModelProvider(requireActivity())[MyPageViewModel::class.java] }
+    private val searchViewModel by lazy { ViewModelProvider(requireActivity())[SearchViewModel::class.java] }
     private val resultAdapter by lazy { ResultAdapter() }
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -54,5 +55,6 @@ class MyPageFragment : Fragment(),OnClickItem {
 
     override fun onClick(item: Item) {
         myPageViewModel.removeLikeList(requireContext(),item)
+        searchViewModel.uncheckedLikeItem(item)
     }
 }

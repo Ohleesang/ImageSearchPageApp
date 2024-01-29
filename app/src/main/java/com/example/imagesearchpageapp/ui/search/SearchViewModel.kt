@@ -1,6 +1,8 @@
 package com.example.imagesearchpageapp.ui.search
 
 import android.content.Context
+import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -43,6 +45,13 @@ class SearchViewModel : ViewModel() {
         newItems
     }
 
+    /**
+     *  좋아요 처리
+     */
+    fun uncheckedLikeItem(item: Item){
+        val list = _itemList.value?.find{it.document == item.document}
+        if(list!=null) list.isLike = !list.isLike
+    }
     /**
      * 검색어 저장
      */

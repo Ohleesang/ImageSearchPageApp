@@ -22,7 +22,7 @@ class SearchFragment : Fragment(),OnClickItem {
     private val binding get() = _binding!!
 
 
-    private val searchViewModel by lazy { ViewModelProvider(this)[SearchViewModel::class.java] }
+    private val searchViewModel by lazy { ViewModelProvider(requireActivity())[SearchViewModel::class.java] }
     private val myPageViewModel by lazy { ViewModelProvider(requireActivity())[MyPageViewModel::class.java] }
     private val resultAdapter by lazy { ResultAdapter() }
     override fun onCreateView(
@@ -109,6 +109,7 @@ class SearchFragment : Fragment(),OnClickItem {
         _binding = null
     }
 
+    //클릭했을때 myPage 만 처리 했지. Searchfragment의 값은 바꾸지 않음;
     override fun onClick(item: Item) {
         if(item.isLike) myPageViewModel.removeLikeList(requireContext(),item)
         else myPageViewModel.addLikeList(requireContext(),item)
