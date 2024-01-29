@@ -9,8 +9,8 @@ import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.imagesearchpageapp.OnClickItem
 import com.example.imagesearchpageapp.ResultAdapter
 import com.example.imagesearchpageapp.data.Item
@@ -58,16 +58,24 @@ class SearchFragment : Fragment(), OnClickItem {
          *  데이터가 변경되면 UI 변경 처리
          */
 
-        //검색 되어 졌을때 결과를 보여 줘야 한다
-        searchViewModel.itemList.observe(viewLifecycleOwner) { newData ->
-            resultAdapter.submitList(newData.toList())
-        }
+        with(searchViewModel) {
+            //검색 되어 졌을때 결과를 보여 줘야 한다
+            itemList.observe(viewLifecycleOwner) { newData ->
+                resultAdapter.submitList(newData.toList())
+            }
 
-        //저장된 쿼리값 이 변경 되면 해당 쿼리값 을 저장
-        searchViewModel.savedQuery.observe(viewLifecycleOwner) { savedQuery ->
-            binding.svSearchImg.setQuery(savedQuery, false)
-        }
+            //저장된 쿼리값 이 변경 되면 해당 쿼리값 을 저장
+            savedQuery.observe(viewLifecycleOwner) { savedQuery ->
+                binding.svSearchImg.setQuery(savedQuery, false)
+            }
 
+
+            //최상단일때 플로팅 버튼 가리기
+            scrolledY.observe(viewLifecycleOwner) {y ->
+                if (y==0) binding.btnFloating.visibility = View.GONE
+                else binding.btnFloating.visibility = View.VISIBLE
+            }
+        }
         /**
          *  검색 실행 해야 할때 searchViewModel 에게 기능을 실행 요청
          */
@@ -93,6 +101,25 @@ class SearchFragment : Fragment(), OnClickItem {
             searchViewModel.setSavedQuery(query)
             hideKeyboard()
 
+        }
+
+        /**
+         *  플로팅 버튼
+         */
+
+        //최 상단에 올리기
+        binding.btnFloating.setOnClickListener {
+            binding.rvSearch.smoothScrollToPosition(0)
+        }
+
+        // 스크롤 될때 해당 포지션을 전달
+        binding.rvSearch.apply {
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    val verticalScrollOffset = recyclerView.computeVerticalScrollOffset()
+                    searchViewModel.checkScrollY(verticalScrollOffset)
+                }
+            })
         }
     }
 
