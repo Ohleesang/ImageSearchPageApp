@@ -17,14 +17,14 @@ import com.example.imagesearchpageapp.data.Item
 import com.example.imagesearchpageapp.databinding.FragmentSearchBinding
 import com.example.imagesearchpageapp.ui.mypage.MyPageViewModel
 
-class SearchFragment : Fragment(),OnClickItem {
+class SearchFragment : Fragment(), OnClickItem {
 
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
 
 
-    private val searchViewModel : SearchViewModel by activityViewModels()
-    private val myPageViewModel : MyPageViewModel by activityViewModels()
+    private val searchViewModel: SearchViewModel by activityViewModels()
+    private val myPageViewModel: MyPageViewModel by activityViewModels()
     private val resultAdapter by lazy { ResultAdapter() }
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -52,7 +52,7 @@ class SearchFragment : Fragment(),OnClickItem {
         resultAdapter.setOnClickedItem(this)
 
         //해당 저장된 쿼리값 불러오기
-        searchViewModel.initSavedQuery(requireContext())
+        searchViewModel.initSavedQuery()
 
         /**
          *  데이터가 변경되면 UI 변경 처리
@@ -75,7 +75,7 @@ class SearchFragment : Fragment(),OnClickItem {
             setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
                     searchViewModel.fetchSearchImage(query)
-                    searchViewModel.setSavedQuery(requireContext(), query)
+                    searchViewModel.setSavedQuery(query)
                     return false
                 }
 
@@ -90,7 +90,7 @@ class SearchFragment : Fragment(),OnClickItem {
         binding.btnSearchOk.setOnClickListener {
             val query = binding.svSearchImg.query.toString()
             searchViewModel.fetchSearchImage(query)
-            searchViewModel.setSavedQuery(requireContext(), query)
+            searchViewModel.setSavedQuery(query)
             hideKeyboard()
 
         }
@@ -112,7 +112,7 @@ class SearchFragment : Fragment(),OnClickItem {
 
     //클릭했을때 myPage 만 처리 했지. Searchfragment의 값은 바꾸지 않음;
     override fun onClick(item: Item) {
-        if(item.isLike) myPageViewModel.removeLikeList(requireContext(),item)
-        else myPageViewModel.addLikeList(requireContext(),item)
+        if (item.isLike) myPageViewModel.removeLikeList(item)
+        else myPageViewModel.addLikeList(item)
     }
 }
