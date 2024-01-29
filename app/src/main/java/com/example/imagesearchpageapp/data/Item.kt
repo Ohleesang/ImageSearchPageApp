@@ -1,6 +1,6 @@
 package com.example.imagesearchpageapp.data
 
-import com.example.imagesearchpageapp.retrofit.data.Document
+import com.example.imagesearchpageapp.retrofit.data.image.Document
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException

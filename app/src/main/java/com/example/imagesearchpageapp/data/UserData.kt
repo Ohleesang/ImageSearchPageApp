@@ -2,7 +2,7 @@ package com.example.imagesearchpageapp.data
 
 import android.app.Application
 import android.content.Context
-import com.example.imagesearchpageapp.retrofit.data.Document
+import com.example.imagesearchpageapp.retrofit.data.image.Document
 import com.google.gson.Gson
 import java.util.UUID
 

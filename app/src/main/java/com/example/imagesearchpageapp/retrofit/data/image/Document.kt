@@ -1,4 +1,4 @@
-package com.example.imagesearchpageapp.retrofit.data
+package com.example.imagesearchpageapp.retrofit.data.image
 
 import com.google.gson.annotations.SerializedName
 

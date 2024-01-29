@@ -5,10 +5,10 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-object RetrofitInstance {
+object  RetrofitInstance {
     private const val BASE_URL = "https://dapi.kakao.com/v2/search/"
 
-    val api: DaumImageSearchApi by lazy { retrofit.create(DaumImageSearchApi::class.java) }
+    val api: DaumSearchApi by lazy { retrofit.create(DaumSearchApi::class.java) }
 
     private val retrofit by lazy{
         Retrofit.Builder()

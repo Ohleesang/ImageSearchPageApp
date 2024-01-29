@@ -1,4 +1,4 @@
-package com.example.imagesearchpageapp.retrofit.data
+package com.example.imagesearchpageapp.retrofit.data.video
 
 data class Meta(
     val is_end: Boolean,
