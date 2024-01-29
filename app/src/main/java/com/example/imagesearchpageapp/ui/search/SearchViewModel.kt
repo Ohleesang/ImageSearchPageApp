@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.imagesearchpageapp.SearchRepository
 import com.example.imagesearchpageapp.data.Item
 import com.example.imagesearchpageapp.data.UserData
 import com.example.imagesearchpageapp.retrofit.RetrofitInstance
@@ -15,7 +16,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class SearchViewModel : ViewModel() {
+class SearchViewModel(private val searchRepository: SearchRepository) : ViewModel() {
 
     private val _itemList = MutableLiveData<List<Item>>()
     val itemList: LiveData<List<Item>> get() = _itemList
@@ -56,13 +57,13 @@ class SearchViewModel : ViewModel() {
     /**
      * 검색어 저장
      */
-    fun setSavedQuery(context: Context,query :String?){
+    fun setSavedQuery(query :String?){
         _savedQuery.value = query
-        UserData(context).saveQueryData(query)
+        searchRepository.userData.saveQueryData(query)
     }
 
-    fun initSavedQuery(context: Context){
-        val savedUserQuery = UserData(context).loadQueryData()
+    fun initSavedQuery(){
+        val savedUserQuery = searchRepository.userData.loadQueryData()
         _savedQuery.value = savedUserQuery
     }
 }

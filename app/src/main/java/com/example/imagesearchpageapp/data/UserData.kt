@@ -1,5 +1,6 @@
 package com.example.imagesearchpageapp.data
 
+import android.app.Application
 import android.content.Context
 import com.example.imagesearchpageapp.retrofit.data.Document
 import com.google.gson.Gson
@@ -8,7 +9,7 @@ import java.util.UUID
 /**
  *  SharedPreference 를 이용하여 UserData를 관리하는 클래스
  */
-class UserData(private val context: Context) {
+class UserData(private val application: Application) {
     companion object {
         const val USER_PREF = "user_pref"
         const val SAVE_QUERY = "save_query"
@@ -26,7 +27,7 @@ class UserData(private val context: Context) {
 
     // 저장된 유저 데이터(좋아요) 반환하기
     fun getUserLikeData(): List<Item> {
-        val pref = context.getSharedPreferences(USER_LIKE, Context.MODE_PRIVATE)
+        val pref = application.getSharedPreferences(USER_LIKE, Context.MODE_PRIVATE)
         val values = pref.all.values
 
         //Document 객체로 전환
@@ -45,7 +46,7 @@ class UserData(private val context: Context) {
 
     // 좋아요 데이터 추가
     fun addUserLikeData(item: Item) {
-        val pref = context.getSharedPreferences(USER_LIKE, Context.MODE_PRIVATE)
+        val pref = application.getSharedPreferences(USER_LIKE, Context.MODE_PRIVATE)
         val json = Gson().toJson(item.document)
         val edit = pref.edit()
         val key = UUID.randomUUID().toString()
@@ -55,7 +56,7 @@ class UserData(private val context: Context) {
 
     //좋아요 데이터 제거
     fun deleteUserLikeData(item: Item) {
-        val pref = context.getSharedPreferences(USER_LIKE, Context.MODE_PRIVATE)
+        val pref = application.getSharedPreferences(USER_LIKE, Context.MODE_PRIVATE)
         val json = Gson().toJson(item.document)
         val map = pref.all
         //key 값을 찾는다
@@ -72,7 +73,7 @@ class UserData(private val context: Context) {
      */
     fun saveQueryData(query: String?) {
 
-        val pref = context.getSharedPreferences(USER_PREF, Context.MODE_PRIVATE)
+        val pref = application.getSharedPreferences(USER_PREF, Context.MODE_PRIVATE)
         val edit = pref.edit()// 수정 모드
         //(key,value) 형태
         edit.putString(SAVE_QUERY, query)
@@ -81,7 +82,7 @@ class UserData(private val context: Context) {
     }
 
     fun loadQueryData(): String {
-        val pref = context.getSharedPreferences(USER_PREF, Context.MODE_PRIVATE)
+        val pref = application.getSharedPreferences(USER_PREF, Context.MODE_PRIVATE)
         return pref.getString(SAVE_QUERY, "") ?: ""
     }
 

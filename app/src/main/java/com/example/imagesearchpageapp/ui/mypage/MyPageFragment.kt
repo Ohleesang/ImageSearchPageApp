@@ -41,7 +41,7 @@ class MyPageFragment : Fragment(),OnClickItem {
         resultAdapter.setOnClickedItem(this)
 
         //SharedPreference 의 값을 불러 들어서 초기화
-        myPageViewModel.initLikeList(requireContext())
+        myPageViewModel.initLikeList()
 
         //리스트 값 변경 되면 자동으로 UI 업데이트
         myPageViewModel.likeList.observe(viewLifecycleOwner){ likeData ->
@@ -55,7 +55,7 @@ class MyPageFragment : Fragment(),OnClickItem {
     }
 
     override fun onClick(item: Item) {
-        myPageViewModel.removeLikeList(requireContext(),item)
+        myPageViewModel.removeLikeList(item)
         searchViewModel.uncheckedLikeItem(item)
     }
 }
