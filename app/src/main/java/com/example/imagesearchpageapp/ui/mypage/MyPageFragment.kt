@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.imagesearchpageapp.OnClickItem
@@ -18,8 +19,8 @@ class MyPageFragment : Fragment(),OnClickItem {
     private var _binding: FragmentMyPageBinding? = null
     private val binding get() = _binding!!
 
-    private val myPageViewModel by lazy { ViewModelProvider(requireActivity())[MyPageViewModel::class.java] }
-    private val searchViewModel by lazy { ViewModelProvider(requireActivity())[SearchViewModel::class.java] }
+    private val searchViewModel : SearchViewModel by activityViewModels()
+    private val myPageViewModel : MyPageViewModel by activityViewModels()
     private val resultAdapter by lazy { ResultAdapter() }
     override fun onCreateView(
         inflater: LayoutInflater,
