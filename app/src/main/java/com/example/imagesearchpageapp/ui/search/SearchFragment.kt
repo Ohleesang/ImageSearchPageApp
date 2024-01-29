@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.imagesearchpageapp.OnClickItem
@@ -22,8 +23,8 @@ class SearchFragment : Fragment(),OnClickItem {
     private val binding get() = _binding!!
 
 
-    private val searchViewModel by lazy { ViewModelProvider(this)[SearchViewModel::class.java] }
-    private val myPageViewModel by lazy { ViewModelProvider(requireActivity())[MyPageViewModel::class.java] }
+    private val searchViewModel : SearchViewModel by activityViewModels()
+    private val myPageViewModel : MyPageViewModel by activityViewModels()
     private val resultAdapter by lazy { ResultAdapter() }
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -109,6 +110,7 @@ class SearchFragment : Fragment(),OnClickItem {
         _binding = null
     }
 
+    //클릭했을때 myPage 만 처리 했지. Searchfragment의 값은 바꾸지 않음;
     override fun onClick(item: Item) {
         if(item.isLike) myPageViewModel.removeLikeList(requireContext(),item)
         else myPageViewModel.addLikeList(requireContext(),item)

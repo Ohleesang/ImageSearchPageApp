@@ -1,9 +1,12 @@
 package com.example.imagesearchpageapp.ui.search
 
 import android.content.Context
+import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.imagesearchpageapp.data.Item
 import com.example.imagesearchpageapp.data.UserData
 import com.example.imagesearchpageapp.retrofit.RetrofitInstance
@@ -26,7 +29,7 @@ class SearchViewModel : ViewModel() {
      */
     fun fetchSearchImage(query: String?): Boolean {
         if (query.isNullOrBlank()) return false
-        CoroutineScope(Dispatchers.Main).launch {
+        viewModelScope.launch {
             val newItems = searchImages(query)
             _itemList.value = newItems
         }
@@ -43,6 +46,13 @@ class SearchViewModel : ViewModel() {
         newItems
     }
 
+    /**
+     *  좋아요 처리
+     */
+    fun uncheckedLikeItem(item: Item){
+        val list = _itemList.value?.find{it.document == item.document}
+        if(list!=null) list.isLike = false
+    }
     /**
      * 검색어 저장
      */
