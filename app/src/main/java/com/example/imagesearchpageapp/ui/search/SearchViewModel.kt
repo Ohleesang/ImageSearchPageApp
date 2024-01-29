@@ -1,17 +1,13 @@
 package com.example.imagesearchpageapp.ui.search
 
-import android.content.Context
-import android.util.Log
-import android.widget.Toast
+
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.imagesearchpageapp.SearchRepository
 import com.example.imagesearchpageapp.data.Item
-import com.example.imagesearchpageapp.data.UserData
 import com.example.imagesearchpageapp.retrofit.RetrofitInstance
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -24,6 +20,8 @@ class SearchViewModel(private val searchRepository: SearchRepository) : ViewMode
     private val _savedQuery = MutableLiveData<String?>()
     val savedQuery: LiveData<String?> get() = _savedQuery
 
+    private val _scrolledY = MutableLiveData<Int>()
+    val scrolledY: LiveData<Int> get() = _scrolledY
 
     /**
      *  이미지 검색
@@ -50,20 +48,28 @@ class SearchViewModel(private val searchRepository: SearchRepository) : ViewMode
     /**
      *  좋아요 처리
      */
-    fun uncheckedLikeItem(item: Item){
-        val list = _itemList.value?.find{it.document == item.document}
-        if(list!=null) list.isLike = false
+    fun uncheckedLikeItem(item: Item) {
+        val list = _itemList.value?.find { it.document == item.document }
+        if (list != null) list.isLike = false
     }
+
     /**
      * 검색어 저장
      */
-    fun setSavedQuery(query :String?){
+    fun setSavedQuery(query: String?) {
         _savedQuery.value = query
         searchRepository.userData.saveQueryData(query)
     }
 
-    fun initSavedQuery(){
+    fun initSavedQuery() {
         val savedUserQuery = searchRepository.userData.loadQueryData()
         _savedQuery.value = savedUserQuery
+    }
+
+    /**
+     * 스크롤 위치
+     */
+    fun checkScrollY(y :Int){
+        _scrolledY.value = y
     }
 }
