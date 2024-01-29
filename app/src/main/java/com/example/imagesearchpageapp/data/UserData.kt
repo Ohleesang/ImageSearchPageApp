@@ -41,6 +41,7 @@ class UserData(private val application: Application) {
         documentList.forEach { document ->
             itemList.add(Item(true, document))
         }
+        itemList.sortByDescending { it.document.dateTime }
         return itemList
     }
 

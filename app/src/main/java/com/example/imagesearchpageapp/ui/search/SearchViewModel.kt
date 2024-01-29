@@ -1,17 +1,13 @@
 package com.example.imagesearchpageapp.ui.search
 
-import android.content.Context
-import android.util.Log
-import android.widget.Toast
+
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.imagesearchpageapp.SearchRepository
 import com.example.imagesearchpageapp.data.Item
-import com.example.imagesearchpageapp.data.UserData
 import com.example.imagesearchpageapp.retrofit.RetrofitInstance
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

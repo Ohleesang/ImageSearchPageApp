@@ -69,4 +69,19 @@
         app:layout_constraintTop_toBottomOf="@+id/cl_upper_search"
         tools:listitem="@layout/recycler_view_item" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btn_floating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="24dp"
+        android:clickable="true"
+        android:src="@drawable/ic_upper_arrow_24dp"
+        app:backgroundTint="@color/colorPrimary"
+        app:fabCustomSize="60dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:tint="@color/white"
+        app:rippleColor="#F3384D" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
