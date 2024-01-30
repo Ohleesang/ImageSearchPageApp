@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.imagesearchpageapp.SearchRepository
 import com.example.imagesearchpageapp.data.Item
+import com.example.imagesearchpageapp.data.ItemDocument
 import com.example.imagesearchpageapp.retrofit.RetrofitInstance
 import com.example.imagesearchpageapp.retrofit.data.image.Document
 import kotlinx.coroutines.Dispatchers
@@ -33,7 +34,7 @@ class SearchViewModel(private val searchRepository: SearchRepository) : ViewMode
             val newImageItems = searchImages(query)
             val newVideoItems = searchVideos(query)
             var newItems = newImageItems + newVideoItems
-            newItems = newItems.sortedByDescending { it.document.dateTime }
+            newItems = newItems.sortedByDescending { it.itemDocument.dateTime }
             _itemList.value = newItems
         }
         return true
@@ -43,7 +44,8 @@ class SearchViewModel(private val searchRepository: SearchRepository) : ViewMode
         val documents = RetrofitInstance.api.searchVideos(query = query).documents
         val newItems = mutableListOf<Item>()
         documents.forEach {
-            newItems.add(Item(false, Document(it.dateTime,"[video] " + it.title,it.thumbNailUrl)))
+            val itemDocument = it.toItemDocument()
+            newItems.add(Item(false,itemDocument))
         }
         newItems
     }
@@ -51,7 +53,8 @@ class SearchViewModel(private val searchRepository: SearchRepository) : ViewMode
         val documents = RetrofitInstance.api.searchImages(query = query).documents
         val newItems = mutableListOf<Item>()
         documents.forEach {
-            newItems.add(Item(false, Document(it.dateTime,"[image] " + it.siteName,it.thumbNailUrl)))
+            val itemDocument = it.toItemDocument()
+            newItems.add(Item(false,itemDocument))
         }
         newItems
     }
@@ -60,7 +63,7 @@ class SearchViewModel(private val searchRepository: SearchRepository) : ViewMode
      *  좋아요 처리
      */
     fun uncheckedLikeItem(item: Item) {
-        val list = _itemList.value?.find { it.document == item.document }
+        val list = _itemList.value?.find { it.itemDocument == item.itemDocument }
         if (list != null) list.isLike = false
     }
 

@@ -3,7 +3,6 @@ package com.example.imagesearchpageapp
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -22,7 +21,7 @@ class ResultAdapter : ListAdapter<Item, ResultAdapter.ResultViewHolder>(DIFF_CAL
         private val DIFF_CALLBACK = object :
             DiffUtil.ItemCallback<Item>() {
             override fun areItemsTheSame(oldItem: Item, newItem: Item) =
-                oldItem.document == newItem.document
+                oldItem.itemDocument == newItem.itemDocument
 
             override fun areContentsTheSame(oldItem: Item, newItem: Item) =
                 oldItem == newItem
@@ -56,12 +55,12 @@ class ResultAdapter : ListAdapter<Item, ResultAdapter.ResultViewHolder>(DIFF_CAL
 
             //URL 이미지 설정
             Glide.with(context)
-                .load(item.document.thumbNailUrl)
+                .load(item.itemDocument.thumbNailUrl)
                 .diskCacheStrategy(DiskCacheStrategy.DATA)
                 .into(thumbNailImage)
 
-            siteName.text = item.document.siteName
-            dateTime.text = item.document.dateTime
+            siteName.text = item.itemDocument.title
+            dateTime.text = item.itemDocument.dateTime
 
             /**
              *  Like 애니메이션
