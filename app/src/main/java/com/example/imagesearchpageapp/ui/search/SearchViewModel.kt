@@ -75,7 +75,7 @@ class SearchViewModel(private val searchRepository: SearchRepository) : ViewMode
             viewModelScope.launch {
                 val newImageItems = searchImages(query, searchPage)
                 _itemList.value = _itemList.value?.plus(newImageItems)
-                _itemList.value = _itemList.value?.sortedByDescending { it.itemDocument.dateTime }
+//                _itemList.value = _itemList.value?.sortedByDescending { it.itemDocument.dateTime }
             }
         }
         else if(searchPage >SearchRepository.MAX_SEARCH_IMAGE){
@@ -89,7 +89,7 @@ class SearchViewModel(private val searchRepository: SearchRepository) : ViewMode
                 val newVideoItems = async { searchVideos(query, searchPage) }
                 var newItems = newImageItems.await() + newVideoItems.await()
                 _itemList.value = _itemList.value?.plus(newItems)
-                _itemList.value = _itemList.value?.sortedByDescending { it.itemDocument.dateTime }
+//                _itemList.value = _itemList.value?.sortedByDescending { it.itemDocument.dateTime }
             }
         }
         return true
