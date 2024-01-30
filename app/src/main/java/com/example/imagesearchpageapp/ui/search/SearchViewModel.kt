@@ -73,9 +73,9 @@ class SearchViewModel(private val searchRepository: SearchRepository) : ViewMode
         if(searchPage > SearchRepository.MAX_SEARCH_VIDEO){
             //VIDEO 페이지 수 초과 하면 IMAGE 만 검색
             viewModelScope.launch {
-                val newImageItems = searchImages(query, searchPage)
+                var newImageItems = searchImages(query, searchPage)
+                newImageItems = newImageItems.sortedByDescending { it.itemDocument.dateTime }.toMutableList()
                 _itemList.value = _itemList.value?.plus(newImageItems)
-//                _itemList.value = _itemList.value?.sortedByDescending { it.itemDocument.dateTime }
             }
         }
         else if(searchPage >SearchRepository.MAX_SEARCH_IMAGE){
@@ -88,8 +88,8 @@ class SearchViewModel(private val searchRepository: SearchRepository) : ViewMode
                 val newImageItems = async { searchImages(query, searchPage) }
                 val newVideoItems = async { searchVideos(query, searchPage) }
                 var newItems = newImageItems.await() + newVideoItems.await()
+                newItems = newItems.sortedByDescending { it.itemDocument.dateTime }
                 _itemList.value = _itemList.value?.plus(newItems)
-//                _itemList.value = _itemList.value?.sortedByDescending { it.itemDocument.dateTime }
             }
         }
         return true
