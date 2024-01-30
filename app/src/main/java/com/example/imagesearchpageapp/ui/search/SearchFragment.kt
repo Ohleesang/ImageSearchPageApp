@@ -2,6 +2,7 @@ package com.example.imagesearchpageapp.ui.search
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -70,8 +71,9 @@ class SearchFragment : Fragment(), OnClickItem {
             }
 
 
-            //최상단일때 플로팅 버튼 가리기
+            //스크롤 위치에 따른 이벤트 처리
             scrolledY.observe(viewLifecycleOwner) {y ->
+                //최상단일때 플로팅 버튼 가리기
                 if (y==0) binding.btnFloating.visibility = View.GONE
                 else binding.btnFloating.visibility = View.VISIBLE
             }
@@ -104,7 +106,7 @@ class SearchFragment : Fragment(), OnClickItem {
         }
 
         /**
-         *  플로팅 버튼
+         *  플로팅 버튼 및 스크롤 이벤트
          */
 
         //최 상단에 올리기
@@ -116,8 +118,20 @@ class SearchFragment : Fragment(), OnClickItem {
         binding.rvSearch.apply {
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    val verticalScrollOffset = recyclerView.computeVerticalScrollOffset()
-                    searchViewModel.checkScrollY(verticalScrollOffset)
+                    recyclerView?.apply {
+                        val totalScrollOffset = computeVerticalScrollOffset()
+                        val totalScrollRange = computeVerticalScrollRange()
+                        val isAtBottom = totalScrollOffset >= totalScrollRange - height
+
+                        // y값을 전달해 줌
+                        searchViewModel.checkScrollY(totalScrollOffset)
+//                        Log.d("scroll","$totalScrollOffset")
+                        // 맨 아래에 위치 했을때, 추가 검색 실행
+                        if (isAtBottom && dy > 0) {  // dy > 0은 아래로 스크롤하는 경우만 확인
+                            val query = binding.svSearchImg.query.toString()
+                            searchViewModel.scrolledOverSearch(query)
+                        }
+                    }
                 }
             })
         }

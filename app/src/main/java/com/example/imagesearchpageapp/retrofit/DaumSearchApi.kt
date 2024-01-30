@@ -16,15 +16,17 @@ interface DaumSearchApi {
     suspend fun searchImages(
         @Header("Authorization") authorization: String = "KakaoAK $REST_API_KEY",
         @Query("query") query: String,
-        @Query("size") pageSize: Int = 50,
-        @Query("sort") sort: String = "recency"
+        @Query("page") page: Int,
+        @Query("size") pageSize: Int = 5,
+        @Query("sort") sort: String = "recency",
     ): ResponseImageData
 
     @GET("vclip")
     suspend fun searchVideos(
         @Header("Authorization") authorization: String = "KakaoAK $REST_API_KEY",
         @Query("query") query: String,
-        @Query("size") pageSize: Int = 30,
-        @Query("sort") sort: String = "recency"
+        @Query("page") page: Int,
+        @Query("size") pageSize: Int = 5,
+        @Query("sort") sort: String = "recency",
     ): ResponseVideoData
 }
