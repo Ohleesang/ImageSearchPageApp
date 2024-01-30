@@ -5,11 +5,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.imagesearchpageapp.SearchRepository
+import com.example.imagesearchpageapp.data.SearchRepository
 import com.example.imagesearchpageapp.data.Item
-import com.example.imagesearchpageapp.data.ItemDocument
 import com.example.imagesearchpageapp.retrofit.RetrofitInstance
-import com.example.imagesearchpageapp.retrofit.data.image.Document
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch

@@ -1,4 +1,4 @@
-package com.example.imagesearchpageapp
+package com.example.imagesearchpageapp.data
 
 
 import android.app.Application

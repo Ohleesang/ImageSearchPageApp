@@ -1,12 +1,10 @@
 package com.example.imagesearchpageapp.ui.mypage
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.imagesearchpageapp.SearchRepository
+import com.example.imagesearchpageapp.data.SearchRepository
 import com.example.imagesearchpageapp.data.Item
-import com.example.imagesearchpageapp.data.UserData
 
 class MyPageViewModel(private val searchRepository: SearchRepository) : ViewModel() {
 

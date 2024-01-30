@@ -13,7 +13,7 @@ data class Document(
 ) {
     fun toItemDocument() = ItemDocument(
         dateTime = this.dateTime,
-        title = "[VIDEO]" + this.title,
+        title = "[VIDEO] " + this.title,
         thumbNailUrl = this.thumbNailUrl
     )
 }

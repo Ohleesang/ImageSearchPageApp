@@ -14,7 +14,7 @@ data class Document(
 ){
     fun toItemDocument() = ItemDocument(
         dateTime = this.dateTime,
-        title = "[IMAGE]" + this.siteName,
+        title = "[IMAGE] " + this.siteName,
         thumbNailUrl = this.thumbNailUrl
     )
 }
