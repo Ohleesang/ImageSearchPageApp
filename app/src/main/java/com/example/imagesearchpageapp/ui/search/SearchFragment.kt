@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -130,6 +131,7 @@ class SearchFragment : Fragment(), OnClickItem {
                         if (isAtBottom && dy > 0) {  // dy > 0은 아래로 스크롤하는 경우만 확인
                             val query = binding.svSearchImg.query.toString()
                             searchViewModel.scrolledOverSearch(query)
+//                            Toast.makeText(requireContext(),"${binding.rvSearch.adapter?.itemCount}",Toast.LENGTH_SHORT).show()
                         }
                     }
                 }
