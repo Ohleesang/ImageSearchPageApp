@@ -11,6 +11,7 @@ import com.example.imagesearchpageapp.data.ItemDocument
 import com.example.imagesearchpageapp.retrofit.RetrofitInstance
 import com.example.imagesearchpageapp.retrofit.data.image.Document
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -31,9 +32,9 @@ class SearchViewModel(private val searchRepository: SearchRepository) : ViewMode
     fun fetchSearchImage(query: String?): Boolean {
         if (query.isNullOrBlank()) return false
         viewModelScope.launch {
-            val newImageItems = searchImages(query)
-            val newVideoItems = searchVideos(query)
-            var newItems = newImageItems + newVideoItems
+            val newImageItems = async { searchImages(query) }
+            val newVideoItems = async { searchVideos(query) }
+            var newItems = newImageItems.await() + newVideoItems.await()
             newItems = newItems.sortedByDescending { it.itemDocument.dateTime }
             _itemList.value = newItems
         }
