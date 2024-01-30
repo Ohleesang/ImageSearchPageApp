@@ -2,7 +2,6 @@ package com.example.imagesearchpageapp.data
 
 import android.app.Application
 import android.content.Context
-import com.example.imagesearchpageapp.retrofit.data.Document
 import com.google.gson.Gson
 import java.util.UUID
 
@@ -31,9 +30,9 @@ class UserData(private val application: Application) {
         val values = pref.all.values
 
         //Document 객체로 전환
-        val documentList = mutableListOf<Document>()
+        val documentList = mutableListOf<ItemDocument>()
         values.forEach {
-            documentList.add(Gson().fromJson(it.toString(), Document::class.java))
+            documentList.add(Gson().fromJson(it.toString(), ItemDocument::class.java))
         }
 
         //Item Instance 생성
@@ -41,14 +40,14 @@ class UserData(private val application: Application) {
         documentList.forEach { document ->
             itemList.add(Item(true, document))
         }
-        itemList.sortByDescending { it.document.dateTime }
+        itemList.sortByDescending { it.itemDocument.dateTime }
         return itemList
     }
 
     // 좋아요 데이터 추가
     fun addUserLikeData(item: Item) {
         val pref = application.getSharedPreferences(USER_LIKE, Context.MODE_PRIVATE)
-        val json = Gson().toJson(item.document)
+        val json = Gson().toJson(item.itemDocument)
         val edit = pref.edit()
         val key = UUID.randomUUID().toString()
         edit.putString(key, json)
@@ -58,7 +57,7 @@ class UserData(private val application: Application) {
     //좋아요 데이터 제거
     fun deleteUserLikeData(item: Item) {
         val pref = application.getSharedPreferences(USER_LIKE, Context.MODE_PRIVATE)
-        val json = Gson().toJson(item.document)
+        val json = Gson().toJson(item.itemDocument)
         val map = pref.all
         //key 값을 찾는다
         val key = map.entries.find { it.value == json }?.key

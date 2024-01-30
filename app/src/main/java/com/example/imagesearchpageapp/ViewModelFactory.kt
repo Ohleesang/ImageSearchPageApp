@@ -2,6 +2,7 @@ package com.example.imagesearchpageapp
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.imagesearchpageapp.data.SearchRepository
 import com.example.imagesearchpageapp.ui.mypage.MyPageViewModel
 import com.example.imagesearchpageapp.ui.search.SearchViewModel
 

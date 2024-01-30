@@ -1,17 +1,22 @@
 package com.example.imagesearchpageapp.data
 
-import com.example.imagesearchpageapp.retrofit.data.Document
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
 
+data class ItemDocument(
+    var dateTime: String,
+    var title: String,
+    val thumbNailUrl: String
+)
+
 data class Item(
     var isLike: Boolean = false,
-    var document: Document,
+    var itemDocument: ItemDocument,
 ) {
     init {
-        document.dateTime = parsingDateTime(document.dateTime)
-        if (document.siteName.isNullOrBlank()) document.siteName = "웹문서"
+        itemDocument.dateTime = parsingDateTime(itemDocument.dateTime)
+        if (itemDocument.title.isNullOrBlank()) itemDocument.title = "웹문서"
     }
 
     private fun parsingDateTime(oldDateTime: String): String {
