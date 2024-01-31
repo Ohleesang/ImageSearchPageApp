@@ -6,8 +6,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
-import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.example.imagesearchpageapp.data.AppData
 import com.example.imagesearchpageapp.data.SearchRepository
 import com.example.imagesearchpageapp.databinding.ActivityMainBinding
 import com.example.imagesearchpageapp.ui.mypage.MyPageViewModel
@@ -20,14 +20,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // SharedPreferences 인스턴스 생성
-        val prefQuery = getSharedPreferences(SearchRepository.PREF_QUERY, Context.MODE_PRIVATE)
-        val prefUserLike = getSharedPreferences(SearchRepository.PREF_LIKE_ITEM,Context.MODE_PRIVATE)
-
+        val appData = AppData(application)
 
 
         //뷰모델 선언
-        val factory = ViewModelFactory(SearchRepository(prefQuery,prefUserLike))
+        val factory = ViewModelFactory(SearchRepository(appData))
         val searchViewModel = ViewModelProvider(this,factory)[SearchViewModel::class.java]
         val myPageViewModel = ViewModelProvider(this,factory)[MyPageViewModel::class.java]
 
