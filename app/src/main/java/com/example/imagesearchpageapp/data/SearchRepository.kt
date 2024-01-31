@@ -5,10 +5,10 @@ import android.content.SharedPreferences
 import com.google.gson.Gson
 import java.util.UUID
 
-class SearchRepository(
-    private val prefQuery: SharedPreferences,
-    private val prefUserLike: SharedPreferences,
-) {
+/**
+ *  ViewModel 이 참조할 데이터 들 및 기능 구현
+ */
+class SearchRepository(appData: AppData) {
 
     companion object {
         const val MAX_SEARCH_VIDEO = 15
@@ -19,6 +19,9 @@ class SearchRepository(
 
         const val PREF_LIKE_ITEM = "pref_like_item"
     }
+
+    private val prefQuery: SharedPreferences = appData.prefQuery
+    private val prefUserLike: SharedPreferences = appData.prefUserLike
 
     /**
      *  검색 쿼리 값 저장
