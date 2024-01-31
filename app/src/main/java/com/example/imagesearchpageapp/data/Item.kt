@@ -4,12 +4,19 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
 
+/**
+ *  2개의 검색 결과를 ItemDocument 로 통합
+ */
 data class ItemDocument(
     var dateTime: String,
     var title: String,
     val thumbNailUrl: String,
 )
 
+/**
+ *  RecyclerVIew 에 보여질 Item
+ *  인스턴스 가 생성될 때, dateTime 파싱 및 title 빈 문자열 처리
+ */
 data class Item(
     var isLike: Boolean = false,
     var itemDocument: ItemDocument,
@@ -36,6 +43,9 @@ data class Item(
         }
     }
 
+    /**
+     *  해당 인스턴스와 다른 인스턴스의 실질적으로 같은지 판별
+     */
     override fun equals(other: Any?): Boolean {
         other as Item
         val otherItemDocument = other.itemDocument

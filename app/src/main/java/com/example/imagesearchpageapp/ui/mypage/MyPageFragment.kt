@@ -21,6 +21,7 @@ class MyPageFragment : Fragment(),OnClickItem {
     private val searchViewModel : SearchViewModel by activityViewModels()
     private val myPageViewModel : MyPageViewModel by activityViewModels()
     private val resultAdapter by lazy { ResultAdapter() }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

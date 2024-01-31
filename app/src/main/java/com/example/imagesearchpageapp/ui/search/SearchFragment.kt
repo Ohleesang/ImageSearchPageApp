@@ -2,12 +2,10 @@ package com.example.imagesearchpageapp.ui.search
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -50,23 +48,29 @@ class SearchFragment : Fragment(), OnClickItem {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        //클릭 인터페이스 연결
-        resultAdapter.setOnClickedItem(this)
+        setObserver()
+        searchQueryEvent()
+        setScrollEvent()
+        setClickEvent()
 
-        //해당 저장된 쿼리값 불러오기
-        searchViewModel.initSavedQuery()
-        myPageViewModel.initLikeList()
+    }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
-        /**
-         *  데이터가 변경되면 UI 변경 처리
-         */
+    /**
+     *  데이터가 변경되면 UI 변경 처리 를 위해 옵저버 설정
+     */
+    private fun setObserver() {
 
         with(searchViewModel) {
             //검색 되어 졌을때 결과를 보여 줘야 한다
             itemList.observe(viewLifecycleOwner) { newData ->
                 // 이때 newData 랑 oldData를 비교하여 만약 isLike가 다르면 처리해야함
                 val likeList = myPageViewModel.likeList
-                val resultData = searchViewModel.checkLikeItemList(newData,likeList)
+                val resultData = searchViewModel.checkLikeItemList(newData, likeList)
+
                 resultAdapter.submitList(resultData)
             }
 
@@ -77,15 +81,21 @@ class SearchFragment : Fragment(), OnClickItem {
 
 
             //스크롤 위치에 따른 이벤트 처리
-            scrolledY.observe(viewLifecycleOwner) {y ->
-                //최상단일때 플로팅 버튼 가리기
-                if (y==0) binding.btnFloating.visibility = View.GONE
+            scrolledY.observe(viewLifecycleOwner) { y ->
+                //최상단 일때 플로팅 버튼 가리기
+                if (y == 0) binding.btnFloating.visibility = View.GONE
                 else binding.btnFloating.visibility = View.VISIBLE
             }
+
         }
-        /**
-         *  검색 실행 해야 할때 searchViewModel 에게 기능을 실행 요청
-         */
+    }
+
+    /**
+     *  검색 실행 부분
+     */
+    private fun searchQueryEvent() {
+
+
         binding.svSearchImg.apply {
             setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
@@ -110,9 +120,20 @@ class SearchFragment : Fragment(), OnClickItem {
 
         }
 
-        /**
-         *  플로팅 버튼 및 스크롤 이벤트
-         */
+    }
+
+    //키보드 내리기
+    private fun hideKeyboard() {
+        val imm =
+            requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(binding.root.windowToken, 0)
+    }
+
+    /**
+     *  플로팅 버튼 및 스크롤 이벤트
+     */
+    private fun setScrollEvent() {
+
 
         //최 상단에 올리기
         binding.btnFloating.setOnClickListener {
@@ -130,6 +151,7 @@ class SearchFragment : Fragment(), OnClickItem {
 
                         // y값을 전달해 줌
                         searchViewModel.checkScrollY(totalScrollOffset)
+
                         // 맨 아래에 위치 했을때, 추가 검색 실행
                         if (isAtBottom && dy > 0) {  // dy > 0은 아래로 스크롤하는 경우만 확인
                             val query = binding.svSearchImg.query.toString()
@@ -141,27 +163,17 @@ class SearchFragment : Fragment(), OnClickItem {
         }
     }
 
-
-    //키보드 내리기
-    private fun hideKeyboard() {
-        val imm =
-            requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(binding.root.windowToken, 0)
+    /**
+     *  View 클릭 이벤트 처리
+     */
+    private fun setClickEvent() {
+        resultAdapter.setOnClickedItem(this)
     }
-
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
 
     override fun onClick(item: Item) {
         if (item.isLike) {
             myPageViewModel.removeLikeList(item)
-
-        }
-        else {
+        } else {
             myPageViewModel.addLikeList(item)
         }
     }

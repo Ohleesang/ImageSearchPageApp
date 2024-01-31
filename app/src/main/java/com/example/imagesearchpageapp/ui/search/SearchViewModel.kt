@@ -96,6 +96,7 @@ class SearchViewModel(private val searchRepository: SearchRepository) : ViewMode
 
     /**
      *  좋아요(취소) 처리
+     *  좋아요 처리는 객체를 참조 해서 자동 으로 구성됨
      */
     fun checkLikeItemList(newData: List<Item>, liveDataLikeList: LiveData<List<Item>?>): List<Item> {
 
