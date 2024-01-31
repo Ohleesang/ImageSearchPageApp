@@ -1,7 +1,9 @@
 package com.example.imagesearchpageapp
 
 
+import android.os.Build
 import android.os.Bundle
+import android.view.View
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -22,6 +24,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var myPageViewModel: MyPageViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        //상태바 투명 하게 하기
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
 
         initViewModel()
         initView()

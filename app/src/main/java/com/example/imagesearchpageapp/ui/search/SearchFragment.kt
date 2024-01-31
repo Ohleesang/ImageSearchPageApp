@@ -83,8 +83,12 @@ class SearchFragment : Fragment(), OnClickItem {
             //스크롤 위치에 따른 이벤트 처리
             scrolledY.observe(viewLifecycleOwner) { y ->
                 //최상단 일때 플로팅 버튼 가리기
-                if (y == 0) binding.btnFloating.visibility = View.GONE
-                else binding.btnFloating.visibility = View.VISIBLE
+                if (y == 0) {
+                    binding.btnFloating.visibility = View.GONE
+                }
+                else {
+                    binding.btnFloating.visibility = View.VISIBLE
+                }
             }
 
         }

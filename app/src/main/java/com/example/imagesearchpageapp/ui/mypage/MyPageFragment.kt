@@ -43,6 +43,8 @@ class MyPageFragment : Fragment(),OnClickItem {
         //리스트 값 변경 되면 자동으로 UI 업데이트
         myPageViewModel.likeList.observe(viewLifecycleOwner){ likeData ->
             resultAdapter.submitList(likeData?.toList())
+            if(likeData?.isEmpty() == true) binding.clNoLikeItem.visibility =View.VISIBLE
+            else binding.clNoLikeItem.visibility =View.GONE
         }
     }
 
