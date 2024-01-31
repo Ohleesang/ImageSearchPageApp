@@ -40,12 +40,11 @@ class MyPageFragment : Fragment(),OnClickItem {
         //클릭 인터페이스 등록
         resultAdapter.setOnClickedItem(this)
 
-        //SharedPreference 의 값을 불러 들어서 초기화
-        myPageViewModel.initLikeList()
-
         //리스트 값 변경 되면 자동으로 UI 업데이트
         myPageViewModel.likeList.observe(viewLifecycleOwner){ likeData ->
             resultAdapter.submitList(likeData?.toList())
+            if(likeData?.isEmpty() == true) binding.clNoLikeItem.visibility =View.VISIBLE
+            else binding.clNoLikeItem.visibility =View.GONE
         }
     }
 
