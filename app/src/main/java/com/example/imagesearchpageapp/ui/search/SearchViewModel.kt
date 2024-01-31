@@ -26,6 +26,8 @@ class SearchViewModel(private val searchRepository: SearchRepository) : ViewMode
 
     private var searchPage = 1
 
+    private val _snackBarStr = MutableLiveData<String>()
+    val snackBarStr :LiveData<String> get() = _snackBarStr
     /**
      *  이미지 검색
      */
@@ -70,17 +72,20 @@ class SearchViewModel(private val searchRepository: SearchRepository) : ViewMode
         if (query.isNullOrBlank()) return false
 
         searchPage++
-        if (searchPage > SearchRepository.MAX_SEARCH_VIDEO) {
+        if (searchPage > SearchRepository.MAX_SEARCH_IMAGE) {
+            //IMAGE 페이지 수 초과 하면 아무 것도 실행 x
+            _snackBarStr.value = " 이미지 검색 페이지 초과 ! \n 더이상 검색 할수 없어요."
+            return false
+        }
+        else if (searchPage > SearchRepository.MAX_SEARCH_VIDEO) {
             //VIDEO 페이지 수 초과 하면 IMAGE 만 검색
+            _snackBarStr.value = " VIDEO 검색 페이지 수 초과! \n 이미지만 검색 됩니다."
             viewModelScope.launch {
                 var newImageItems = searchImages(query, searchPage)
                 newImageItems =
                     newImageItems.sortedByDescending { it.itemDocument.dateTime }.toMutableList()
                 _itemList.value = _itemList.value?.plus(newImageItems)
             }
-        } else if (searchPage > SearchRepository.MAX_SEARCH_IMAGE) {
-            //IMAGE 페이지 수 초과 하면 아무 것도 실행 x
-            return false
         } else {
             //IMAGE,VIDEO 동시 실행
             viewModelScope.launch {

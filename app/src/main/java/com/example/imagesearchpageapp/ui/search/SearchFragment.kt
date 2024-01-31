@@ -3,12 +3,14 @@ package com.example.imagesearchpageapp.ui.search
 import android.animation.Animator
 import android.content.Context
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import android.view.inputmethod.InputMethodManager
+import android.widget.FrameLayout
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -19,6 +21,7 @@ import com.example.imagesearchpageapp.ResultAdapter
 import com.example.imagesearchpageapp.data.Item
 import com.example.imagesearchpageapp.databinding.FragmentSearchBinding
 import com.example.imagesearchpageapp.ui.mypage.MyPageViewModel
+import com.google.android.material.snackbar.Snackbar
 
 class SearchFragment : Fragment(), OnClickItem {
 
@@ -104,6 +107,11 @@ class SearchFragment : Fragment(), OnClickItem {
                     }
 
                 }
+            }
+
+            //스낵바 표시
+            snackBarStr.observe(viewLifecycleOwner){str ->
+                onSnackBar(str)
             }
 
         }
@@ -246,6 +254,19 @@ class SearchFragment : Fragment(), OnClickItem {
 
 
         view.startAnimation(fade)
+
+    }
+
+    private fun onSnackBar(str :String){
+        val snackBar = Snackbar.make(binding.root, str, Snackbar.LENGTH_LONG)
+        val params = snackBar.view.layoutParams as FrameLayout.LayoutParams
+
+        params.gravity = Gravity.TOP or Gravity.CENTER_HORIZONTAL
+        params.setMargins(60, binding.rvSearch.bottom-120, 60, 0)
+        snackBar.view.layoutParams = params
+
+        snackBar.show()
+
 
     }
 }
