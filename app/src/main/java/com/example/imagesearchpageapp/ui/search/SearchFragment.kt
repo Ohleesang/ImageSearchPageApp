@@ -55,6 +55,7 @@ class SearchFragment : Fragment(), OnClickItem {
 
         //해당 저장된 쿼리값 불러오기
         searchViewModel.initSavedQuery()
+        myPageViewModel.initLikeList()
 
         /**
          *  데이터가 변경되면 UI 변경 처리
