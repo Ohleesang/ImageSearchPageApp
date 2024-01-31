@@ -13,7 +13,7 @@ class MyPageViewModel(private val searchRepository: SearchRepository) : ViewMode
 
 
     fun initLikeList(){
-        val list = searchRepository.userData.getUserLikeData()
+        val list = searchRepository.getUserLikeData()
         _likeList.value = list
     }
     fun addLikeList(item: Item){
@@ -21,7 +21,7 @@ class MyPageViewModel(private val searchRepository: SearchRepository) : ViewMode
         val list = if(likeList.value.isNullOrEmpty()) mutableListOf<Item>()
         else likeList.value!!.toMutableList()
         list.add(item)
-        searchRepository.userData.addUserLikeData(item)
+        searchRepository.addUserLikeData(item)
         _likeList.value = list
     }
 
@@ -29,7 +29,7 @@ class MyPageViewModel(private val searchRepository: SearchRepository) : ViewMode
         item.isLike =!item.isLike
         val list = likeList.value?.toMutableList()
         list?.remove(item)
-        searchRepository.userData.deleteUserLikeData(item)
+        searchRepository.deleteUserLikeData(item)
         _likeList.value = list
     }
 }

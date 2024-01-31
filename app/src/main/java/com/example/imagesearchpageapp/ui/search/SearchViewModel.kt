@@ -107,11 +107,11 @@ class SearchViewModel(private val searchRepository: SearchRepository) : ViewMode
      */
     fun setSavedQuery(query: String?) {
         _savedQuery.value = query
-        searchRepository.userData.saveQueryData(query)
+        searchRepository.saveQueryData(query)
     }
 
     fun initSavedQuery() {
-        val savedUserQuery = searchRepository.userData.loadQueryData()
+        val savedUserQuery = searchRepository.loadQueryData()
         _savedQuery.value = savedUserQuery
     }
 
