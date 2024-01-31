@@ -1,5 +1,6 @@
 package com.example.imagesearchpageapp.ui.search
 
+import android.animation.Animator
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -57,6 +58,7 @@ class SearchFragment : Fragment(), OnClickItem {
         setClickEvent()
 
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -87,16 +89,15 @@ class SearchFragment : Fragment(), OnClickItem {
             scrolledY.observe(viewLifecycleOwner) { y ->
                 //최상단 일때 플로팅 버튼 가리기
                 if (y == 0) {
-                    binding.btnFloating.apply{
+                    binding.btnFloating.apply {
                         visibility = View.GONE
-                        applyFadeAnimation(this,true)
-                        if(checkFloating) checkFloating = false
+                        applyFadeAnimation(this, true)
+                        if (checkFloating) checkFloating = false
                     }
-                }
-                else {
-                    binding.btnFloating.apply{
+                } else {
+                    binding.btnFloating.apply {
                         visibility = View.VISIBLE
-                        if(!checkFloating) {
+                        if (!checkFloating) {
                             checkFloating = true
                             applyFadeAnimation(this, false)
                         }
@@ -170,13 +171,37 @@ class SearchFragment : Fragment(), OnClickItem {
                         // y값을 전달해 줌
                         searchViewModel.checkScrollY(totalScrollOffset)
 
-                        // 맨 아래에 위치 했을때, 추가 검색 실행
-                        if (isAtBottom && dy > 0) {  // dy > 0은 아래로 스크롤하는 경우만 확인
-                            val query = binding.svSearchImg.query.toString()
-                            searchViewModel.scrolledOverSearch(query)
+                        // 맨 아래에 위치 했을때, 추가 검색 실행 -> Animation 실행 이후 추가검색
+                        if (isAtBottom) {
+                            binding.lavAddSearch.apply {
+                                visibility = View.VISIBLE
+                                playAnimation()
+                            }
                         }
+
                     }
                 }
+            })
+        }
+        binding.lavAddSearch.apply{
+            val view = this
+            addAnimatorListener(object : Animator.AnimatorListener{
+                override fun onAnimationStart(animation: Animator) {
+                    applyFadeAnimation(view, false)
+                }
+                override fun onAnimationEnd(animation: Animator) {
+                    //애니메이션이 끝나면 추가 검색 실행
+                    visibility = View.INVISIBLE
+                    val query = binding.svSearchImg.query.toString()
+                    searchViewModel.scrolledOverSearch(query)
+                    applyFadeAnimation(view, true)
+                }
+                override fun onAnimationCancel(animation: Animator) {
+                }
+
+                override fun onAnimationRepeat(animation: Animator) {
+                }
+
             })
         }
     }
@@ -195,11 +220,12 @@ class SearchFragment : Fragment(), OnClickItem {
             myPageViewModel.addLikeList(item)
         }
     }
-    private fun applyFadeAnimation(view: View,isFadeOut:Boolean) {
 
-        val fade : AlphaAnimation = if(isFadeOut) {
-            AlphaAnimation(1.0f,0.0f)
-        } else AlphaAnimation(0.0f,1.0f)
+    private fun applyFadeAnimation(view: View, isFadeOut: Boolean) {
+
+        val fade: AlphaAnimation = if (isFadeOut) {
+            AlphaAnimation(1.0f, 0.0f)
+        } else AlphaAnimation(0.0f, 1.0f)
 
         //fade Out
         fade.duration = 200 // 페이드 아웃 지속 시간 단위 ms 1000 = 1초
@@ -208,7 +234,7 @@ class SearchFragment : Fragment(), OnClickItem {
 
             override fun onAnimationEnd(animation: Animation?) {
 
-                if(isFadeOut) view.visibility = View.INVISIBLE // 페이드 아웃 후 뷰를 숨김
+                if (isFadeOut) view.visibility = View.INVISIBLE // 페이드 아웃 후 뷰를 숨김
                 else view.visibility = View.VISIBLE
             }
 

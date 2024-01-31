@@ -17,7 +17,7 @@ interface DaumSearchApi {
         @Header("Authorization") authorization: String = "KakaoAK $REST_API_KEY",
         @Query("query") query: String,
         @Query("page") page: Int,
-        @Query("size") pageSize: Int = 50,
+        @Query("size") pageSize: Int = 5,
         @Query("sort") sort: String = "recency",
     ): ResponseImageData
 
@@ -26,7 +26,7 @@ interface DaumSearchApi {
         @Header("Authorization") authorization: String = "KakaoAK $REST_API_KEY",
         @Query("query") query: String,
         @Query("page") page: Int,
-        @Query("size") pageSize: Int = 30,
+        @Query("size") pageSize: Int = 5,
         @Query("sort") sort: String = "recency",
     ): ResponseVideoData
 }
