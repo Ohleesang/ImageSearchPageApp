@@ -63,7 +63,10 @@ class SearchFragment : Fragment(), OnClickItem {
         with(searchViewModel) {
             //검색 되어 졌을때 결과를 보여 줘야 한다
             itemList.observe(viewLifecycleOwner) { newData ->
-                resultAdapter.submitList(newData.toList())
+                // 이때 newData 랑 oldData를 비교하여 만약 isLike가 다르면 처리해야함
+                val likeList = myPageViewModel.likeList
+                val resultData = searchViewModel.checkLikeItemList(newData,likeList)
+                resultAdapter.submitList(resultData)
             }
 
             //저장된 쿼리값 이 변경 되면 해당 쿼리값 을 저장
@@ -126,12 +129,10 @@ class SearchFragment : Fragment(), OnClickItem {
 
                         // y값을 전달해 줌
                         searchViewModel.checkScrollY(totalScrollOffset)
-//                        Log.d("scroll","$totalScrollOffset")
                         // 맨 아래에 위치 했을때, 추가 검색 실행
                         if (isAtBottom && dy > 0) {  // dy > 0은 아래로 스크롤하는 경우만 확인
                             val query = binding.svSearchImg.query.toString()
                             searchViewModel.scrolledOverSearch(query)
-//                            Toast.makeText(requireContext(),"${binding.rvSearch.adapter?.itemCount}",Toast.LENGTH_SHORT).show()
                         }
                     }
                 }
@@ -153,9 +154,14 @@ class SearchFragment : Fragment(), OnClickItem {
         _binding = null
     }
 
-    //클릭했을때 myPage 만 처리 했지. Searchfragment의 값은 바꾸지 않음;
+
     override fun onClick(item: Item) {
-        if (item.isLike) myPageViewModel.removeLikeList(item)
-        else myPageViewModel.addLikeList(item)
+        if (item.isLike) {
+            myPageViewModel.removeLikeList(item)
+
+        }
+        else {
+            myPageViewModel.addLikeList(item)
+        }
     }
 }

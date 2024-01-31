@@ -7,7 +7,7 @@ import java.time.format.DateTimeParseException
 data class ItemDocument(
     var dateTime: String,
     var title: String,
-    val thumbNailUrl: String
+    val thumbNailUrl: String,
 )
 
 data class Item(
@@ -34,5 +34,15 @@ data class Item(
             // 원래의 oldDateTime 문자열을 그대로 반환
             oldDateTime
         }
+    }
+
+    override fun equals(other: Any?): Boolean {
+        other as Item
+        val otherItemDocument = other.itemDocument
+        val isSame =
+            otherItemDocument == this.itemDocument
+        if (isSame) return true
+
+        return false
     }
 }

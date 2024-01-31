@@ -55,6 +55,6 @@ class MyPageFragment : Fragment(),OnClickItem {
 
     override fun onClick(item: Item) {
         myPageViewModel.removeLikeList(item)
-        searchViewModel.uncheckedLikeItem(item)
+        searchViewModel.disLikeItem(item)
     }
 }

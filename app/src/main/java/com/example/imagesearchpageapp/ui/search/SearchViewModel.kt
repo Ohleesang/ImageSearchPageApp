@@ -25,10 +25,10 @@ class SearchViewModel(private val searchRepository: SearchRepository) : ViewMode
     val scrolledY: LiveData<Int> get() = _scrolledY
 
     private var searchPage = 1
+
     /**
      *  이미지 검색
      */
-
 
 
     // 검색 버튼 및 검색을 처음 시동
@@ -36,8 +36,8 @@ class SearchViewModel(private val searchRepository: SearchRepository) : ViewMode
         searchPage = 1
         if (query.isNullOrBlank()) return false
         viewModelScope.launch {
-            val newImageItems = async { searchImages(query,searchPage) }
-            val newVideoItems = async { searchVideos(query,searchPage) }
+            val newImageItems = async { searchImages(query, searchPage) }
+            val newVideoItems = async { searchVideos(query, searchPage) }
             var newItems = newImageItems.await() + newVideoItems.await()
             _itemList.value = newItems
             _itemList.value = _itemList.value?.sortedByDescending { it.itemDocument.dateTime }
@@ -66,23 +66,22 @@ class SearchViewModel(private val searchRepository: SearchRepository) : ViewMode
     }
 
     // 추가 검색 부분
-    fun scrolledOverSearch(query: String?):Boolean {
+    fun scrolledOverSearch(query: String?): Boolean {
         if (query.isNullOrBlank()) return false
 
         searchPage++
-        if(searchPage > SearchRepository.MAX_SEARCH_VIDEO){
+        if (searchPage > SearchRepository.MAX_SEARCH_VIDEO) {
             //VIDEO 페이지 수 초과 하면 IMAGE 만 검색
             viewModelScope.launch {
                 var newImageItems = searchImages(query, searchPage)
-                newImageItems = newImageItems.sortedByDescending { it.itemDocument.dateTime }.toMutableList()
+                newImageItems =
+                    newImageItems.sortedByDescending { it.itemDocument.dateTime }.toMutableList()
                 _itemList.value = _itemList.value?.plus(newImageItems)
             }
-        }
-        else if(searchPage >SearchRepository.MAX_SEARCH_IMAGE){
+        } else if (searchPage > SearchRepository.MAX_SEARCH_IMAGE) {
             //IMAGE 페이지 수 초과 하면 아무 것도 실행 x
             return false
-        }
-        else {
+        } else {
             //IMAGE,VIDEO 동시 실행
             viewModelScope.launch {
                 val newImageItems = async { searchImages(query, searchPage) }
@@ -94,12 +93,23 @@ class SearchViewModel(private val searchRepository: SearchRepository) : ViewMode
         }
         return true
     }
+
     /**
-     *  좋아요 처리
+     *  좋아요(취소) 처리
      */
-    fun uncheckedLikeItem(item: Item) {
-        val list = _itemList.value?.find { it.itemDocument == item.itemDocument }
-        if (list != null) list.isLike = false
+    fun checkLikeItemList(newData: List<Item>, liveDataLikeList: LiveData<List<Item>?>): List<Item> {
+
+        val likeItemList = liveDataLikeList.value?.toList()
+
+        likeItemList?.forEach { item ->
+            newData.find { it==item }?.isLike = true
+        }
+        return newData
+    }
+
+    fun disLikeItem(item: Item) {
+        val findItem = _itemList.value?.find { it.itemDocument == item.itemDocument }
+        if (findItem != null) findItem.isLike = false
     }
 
     /**
