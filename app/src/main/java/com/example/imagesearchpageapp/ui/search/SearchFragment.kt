@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AlphaAnimation
+import android.view.animation.Animation
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
@@ -26,6 +28,7 @@ class SearchFragment : Fragment(), OnClickItem {
     private val searchViewModel: SearchViewModel by activityViewModels()
     private val myPageViewModel: MyPageViewModel by activityViewModels()
     private val resultAdapter by lazy { ResultAdapter() }
+    private var checkFloating = false
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -84,10 +87,21 @@ class SearchFragment : Fragment(), OnClickItem {
             scrolledY.observe(viewLifecycleOwner) { y ->
                 //최상단 일때 플로팅 버튼 가리기
                 if (y == 0) {
-                    binding.btnFloating.visibility = View.GONE
+                    binding.btnFloating.apply{
+                        visibility = View.GONE
+                        applyFadeAnimation(this,true)
+                        if(checkFloating) checkFloating = false
+                    }
                 }
                 else {
-                    binding.btnFloating.visibility = View.VISIBLE
+                    binding.btnFloating.apply{
+                        visibility = View.VISIBLE
+                        if(!checkFloating) {
+                            checkFloating = true
+                            applyFadeAnimation(this, false)
+                        }
+                    }
+
                 }
             }
 
@@ -180,5 +194,29 @@ class SearchFragment : Fragment(), OnClickItem {
         } else {
             myPageViewModel.addLikeList(item)
         }
+    }
+    private fun applyFadeAnimation(view: View,isFadeOut:Boolean) {
+
+        val fade : AlphaAnimation = if(isFadeOut) {
+            AlphaAnimation(1.0f,0.0f)
+        } else AlphaAnimation(0.0f,1.0f)
+
+        //fade Out
+        fade.duration = 200 // 페이드 아웃 지속 시간 단위 ms 1000 = 1초
+        fade.setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationStart(animation: Animation?) {}
+
+            override fun onAnimationEnd(animation: Animation?) {
+
+                if(isFadeOut) view.visibility = View.INVISIBLE // 페이드 아웃 후 뷰를 숨김
+                else view.visibility = View.VISIBLE
+            }
+
+            override fun onAnimationRepeat(animation: Animation?) {}
+        })
+
+
+        view.startAnimation(fade)
+
     }
 }
