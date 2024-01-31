@@ -221,6 +221,9 @@ class SearchFragment : Fragment(), OnClickItem {
         }
     }
 
+    /** 위젯 페이드 인/페이드 아웃 Animation
+     *
+     */
     private fun applyFadeAnimation(view: View, isFadeOut: Boolean) {
 
         val fade: AlphaAnimation = if (isFadeOut) {
