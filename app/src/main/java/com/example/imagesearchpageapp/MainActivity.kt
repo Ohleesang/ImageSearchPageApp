@@ -1,7 +1,7 @@
 package com.example.imagesearchpageapp
 
 
-import android.os.Build
+
 import android.os.Bundle
 import android.view.View
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -31,6 +31,7 @@ class MainActivity : AppCompatActivity() {
         initViewModel()
         initView()
         initSaveData()
+
     }
 
     /**

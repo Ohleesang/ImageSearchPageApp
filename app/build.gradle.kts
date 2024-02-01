@@ -1,7 +1,18 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
 }
+
+// local.properties 에서 API 키를 로드
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.inputStream().use { localProperties.load(it) }
+}
+
+val apiKey = localProperties["DAUM_SEARCH_API"] ?: ""
 
 android {
     namespace = "com.example.imagesearchpageapp"
@@ -15,6 +26,9 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        //BuildConfig 클래스에 추가하여 전역변수로 사용가능
+        buildConfigField("String", "DAUM_SEARCH_API", "$apiKey")
     }
 
     buildTypes {
@@ -33,8 +47,10 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-    buildFeatures{
+    buildFeatures {
         viewBinding = true
+        buildConfig = true
+
     }
 }
 
