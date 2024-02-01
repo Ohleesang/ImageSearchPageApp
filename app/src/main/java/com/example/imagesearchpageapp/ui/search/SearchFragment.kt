@@ -3,6 +3,7 @@ package com.example.imagesearchpageapp.ui.search
 import android.animation.Animator
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -33,6 +34,7 @@ class SearchFragment : Fragment(), OnClickItem {
     private val myPageViewModel: MyPageViewModel by activityViewModels()
     private val resultAdapter by lazy { ResultAdapter() }
     private var checkFloating = false
+    private var checkSnackBar = true
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -110,8 +112,11 @@ class SearchFragment : Fragment(), OnClickItem {
             }
 
             //스낵바 표시
-            snackBarStr.observe(viewLifecycleOwner){str ->
-                onSnackBar(str)
+            isViewSnackBar.observe(viewLifecycleOwner){isView ->
+                if(isView){
+                    snackBarStr.value?.let { onSnackBar(it) }
+                    isViewSnackBar.value = false
+                }
             }
 
         }
@@ -191,12 +196,13 @@ class SearchFragment : Fragment(), OnClickItem {
                 }
             })
         }
-        binding.lavAddSearch.apply{
+        binding.lavAddSearch.apply {
             val view = this
-            addAnimatorListener(object : Animator.AnimatorListener{
+            addAnimatorListener(object : Animator.AnimatorListener {
                 override fun onAnimationStart(animation: Animator) {
                     applyFadeAnimation(view, false)
                 }
+
                 override fun onAnimationEnd(animation: Animator) {
                     //애니메이션이 끝나면 추가 검색 실행
                     visibility = View.INVISIBLE
@@ -204,6 +210,7 @@ class SearchFragment : Fragment(), OnClickItem {
                     searchViewModel.scrolledOverSearch(query)
                     applyFadeAnimation(view, true)
                 }
+
                 override fun onAnimationCancel(animation: Animator) {
                 }
 
@@ -257,12 +264,12 @@ class SearchFragment : Fragment(), OnClickItem {
 
     }
 
-    private fun onSnackBar(str :String){
-        val snackBar = Snackbar.make(binding.root, str, Snackbar.LENGTH_LONG)
+    private fun onSnackBar(str: String) {
+        val snackBar = Snackbar.make(binding.rvSearch, str, Snackbar.LENGTH_LONG)
         val params = snackBar.view.layoutParams as FrameLayout.LayoutParams
 
         params.gravity = Gravity.TOP or Gravity.CENTER_HORIZONTAL
-        params.setMargins(60, binding.rvSearch.bottom-120, 60, 0)
+        params.setMargins(60, binding.rvSearch.bottom - 120, 60, 0)
         snackBar.view.layoutParams = params
 
         snackBar.show()
